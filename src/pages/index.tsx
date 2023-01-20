@@ -1,15 +1,17 @@
 import type { NextPage } from 'next';
+export { default as getServerSideProps } from '@/utils/getServerSideProps';
 
-export const getServerSideProps = async () => {
-  return {
-    redirect: {
-      destination: '/events',
-      permanent: false,
-    },
-  };
-};
-const Home: NextPage = () => {
-  return null;
-};
+import dynamic from 'next/dynamic';
+import Header from '@/components/Header';
 
-export default Home;
+const AppComponentWithNoSSR = dynamic(() => import('../components/App'), { ssr: false });
+function Page() {
+  return (
+    <div>
+      <Header />
+      <AppComponentWithNoSSR />
+    </div>
+  );
+}
+
+export default Page;
