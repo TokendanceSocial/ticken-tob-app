@@ -1,21 +1,23 @@
-import '../styles/globals.css';
+import '../styles/theme/app.scss';
+
 import '@rainbow-me/rainbowkit/styles.css';
 import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
 import { RainbowKitSiweNextAuthProvider } from '@rainbow-me/rainbowkit-siwe-next-auth';
 import type { AppProps } from 'next/app';
 import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
+import { appWithTranslation } from 'next-i18next';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { mainnet, polygon, optimism, arbitrum, goerli } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
-
+import { theme } from '@/constanst/rainbowKitTheme';
 const { chains, provider, webSocketProvider } = configureChains(
   [mainnet, polygon, optimism, arbitrum],
   [publicProvider()],
 );
 
 const { connectors } = getDefaultWallets({
-  appName: 'RainbowKit App',
+  appName: 'Ticken Tob App',
   chains,
 });
 
@@ -26,12 +28,12 @@ const wagmiClient = createClient({
   webSocketProvider,
 });
 
-export default function App({ Component, pageProps }: AppProps<{ session: Session }>) {
+function App({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
     <WagmiConfig client={wagmiClient}>
       <SessionProvider refetchInterval={0} session={pageProps.session}>
         <RainbowKitSiweNextAuthProvider>
-          <RainbowKitProvider chains={chains}>
+          <RainbowKitProvider theme={theme} chains={chains}>
             <Component {...pageProps} />
           </RainbowKitProvider>
         </RainbowKitSiweNextAuthProvider>
@@ -39,3 +41,5 @@ export default function App({ Component, pageProps }: AppProps<{ session: Sessio
     </WagmiConfig>
   );
 }
+
+export default appWithTranslation(App);

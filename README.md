@@ -1,5 +1,3 @@
-This is a [RainbowKit](https://rainbowkit.com) + [wagmi](https://wagmi.sh) + [Next.js](https://nextjs.org/) project bootstrapped with [`create-rainbowkit`](https://github.com/rainbow-me/rainbowkit/tree/main/packages/create-rainbowkit).
-
 ## Getting Started
 
 First, run the development server:
@@ -8,22 +6,43 @@ First, run the development server:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 如何切换路由
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+除了 Root 和 App 组件，其他组件均使用 next router
 
-## Learn More
+```typescript
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-To learn more about this stack, take a look at the following resources:
+export default function Events() {
+  return <Link href='/#/orders'>Orders</Link>;
+}
+```
 
-- [RainbowKit Documentation](https://rainbowkit.com) - Learn how to customize your wallet connection flow.
-- [wagmi Documentation](https://wagmi.sh) - Learn how to interact with Ethereum.
-- [Next.js Documentation](https://nextjs.org/docs) - Learn how to build a Next.js application.
+## 如何识别多语言？
 
-You can check out [the RainbowKit GitHub repository](https://github.com/rainbow-me/rainbowkit) - your feedback and contributions are welcome!
+项目使用的是 next-i18next，不同语言的场景体现在 pathname 的变化上，由于全局使用 hash 路由，所以不需要在意 path 的变化
 
-## Deploy on Vercel
+### 如何修改语言包？
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+在 public 目录的 locales 下是不同语言包的 json
 
-Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+理论上我们同语言的所有词条都写在 common.json 里，因为我们只有一个单页，切换菜单路由仅仅是切换客户端组件修改 hash
+
+### 在 react 组件中如何使用？
+
+useTranslation 的依赖由 react-i18next 改成 next-i18next 即可
+
+```typescript
+import { useTranslation } from 'next-i18next';
+export default function Header() {
+  const { t } = useTranslation();
+
+  console.log(t('title'));
+  return (
+    <div>
+      <ConnectButton />
+    </div>
+  );
+}
+```

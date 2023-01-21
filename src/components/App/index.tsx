@@ -1,25 +1,26 @@
+import dynamic from 'next/dynamic';
 import React from 'react';
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Link,
-  createHashRouter,
-} from 'react-router-dom';
+import { RouterProvider, createHashRouter } from 'react-router-dom';
+import Root from '../Root';
+const Events = dynamic(() => import('../Events'), {
+  ssr: false,
+});
 
 const router = createHashRouter([
   {
     path: '/',
-    element: (
-      <div>
-        <h1>Hello World</h1>
-        <Link to='about'>About Us</Link>
-      </div>
-    ),
-  },
-  {
-    path: 'about',
-    element: <div>About</div>,
+    element: <Root />,
+    children: [
+      {
+        index: true,
+        path: 'dashboard',
+        element: <div />,
+      },
+      {
+        path: 'events',
+        element: <Events />,
+      },
+    ],
   },
 ]);
 export default function App() {
