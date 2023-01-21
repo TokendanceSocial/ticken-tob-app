@@ -16,6 +16,7 @@ specifiers:
   husky: ^8.0.3
   i18next: ^22.4.9
   lint-staged: ^13.1.0
+  minidenticons: ^2.0.0
   next: ^12.1.6
   next-auth: ^4.18.8
   next-i18next: ^13.0.3
@@ -38,6 +39,7 @@ dependencies:
   axios: 1.2.3
   ethers: 5.7.2
   i18next: 22.4.9
+  minidenticons: 2.0.0
   next: 12.3.4_3duxcpitbtplz62feflag7fwby
   next-auth: 4.18.8_bhgafntz2ozm43l35i5qtimxry
   next-i18next: 13.0.3_2x4uzwesbsf6f3vhf5r7rdx7fq
@@ -3875,6 +3877,11 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  /minidenticons/2.0.0:
+    resolution: {integrity: sha512-nS7U0oE35WmmH36XwF482qa+5iEXqvilXnyHbtG12brjGMJPoUW8DH+e1Usr0FYlZBdydMN1mHq8/bzZ5RZzXw==}
+    engines: {node: '>=14.0.0'}
+    dev: false
+
   /minimalistic-assert/1.0.1:
     resolution: {integrity: sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==}
     dev: false
@@ -6007,7 +6014,7 @@ packages:
     dev: false
 
   github.com/ethereumjs/ethereumjs-abi/ee3994657fa7a427238e6ba92a84d0b529bbcde0:
-    resolution: {tarball: https://codeload.github.com/ethereumjs/ethereumjs-abi/tar.gz/ee3994657fa7a427238e6ba92a84d0b529bbcde0}
+    resolution: {commit: ee3994657fa7a427238e6ba92a84d0b529bbcde0, repo: git+ssh://git@github.com/ethereumjs/ethereumjs-abi.git, type: git}
     name: ethereumjs-abi
     version: 0.6.8
     dependencies:

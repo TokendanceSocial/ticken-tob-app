@@ -10,6 +10,7 @@ import { appWithTranslation } from 'next-i18next';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { mainnet, polygon, optimism, arbitrum, goerli } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
+import CustomAvatar from '@/components/CustomAvatar';
 import { theme } from '@/constanst/rainbowKitTheme';
 const { chains, provider, webSocketProvider } = configureChains(
   [mainnet, polygon, optimism, arbitrum],
@@ -33,7 +34,7 @@ function App({ Component, pageProps }: AppProps<{ session: Session }>) {
     <WagmiConfig client={wagmiClient}>
       <SessionProvider refetchInterval={0} session={pageProps.session}>
         <RainbowKitSiweNextAuthProvider>
-          <RainbowKitProvider theme={theme} chains={chains}>
+          <RainbowKitProvider avatar={CustomAvatar} theme={theme} chains={chains}>
             <Component {...pageProps} />
           </RainbowKitProvider>
         </RainbowKitSiweNextAuthProvider>
