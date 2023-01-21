@@ -23,7 +23,7 @@ export default function BreadcrumbHistory() {
         </Breadcrumb.Item>
       );
     });
-  }, [url]);
+  }, [t, url]);
 
   return (
     <Breadcrumb className='ticken-breadcrumb'>
