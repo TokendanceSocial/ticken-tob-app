@@ -23,6 +23,7 @@
     "next-auth": "^4.18.8",
     "next-i18next": "^13.0.3",
     "nextjs-breadcrumbs": "^1.1.9",
+    "nft.storage": "^7.0.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-i18next": "^12.1.4",
