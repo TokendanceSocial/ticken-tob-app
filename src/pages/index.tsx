@@ -1,4 +1,3 @@
-import type { NextPage } from 'next';
 export { default as getServerSideProps } from '@/utils/getServerSideProps';
 
 import dynamic from 'next/dynamic';

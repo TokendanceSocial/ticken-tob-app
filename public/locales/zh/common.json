@@ -5,16 +5,5 @@
   "home": "Home",
   "dashboard": "Dashboard",
   "eventsList": "Events List",
-  "newEvents": "New Events",
-  "connectWallet": "连接你的钱包",
-  "connectWalletTip": "如果没有钱包，可以选取提供商并立即建立一个钱包。",
-  "knowMore": "了解详情",
-  "copySuccess": "复制成功",
-  "clickAndCopy": "点击并复制到剪切板",
-  "disconnect": "退出",
-  "connectTo": "连接来自{{name}}",
-  "unsupported": "不支持此连接方式",
-  "connecting": "连接中",
-  "checkWallet": "检测钱包中",
-  "signInvalid": "签名校验失败，请确认地址是否正确"
+  "newEvents": "New Events"
 }
