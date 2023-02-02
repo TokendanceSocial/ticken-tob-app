@@ -20,8 +20,8 @@ export default function UploadCover(props?: {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      setLoading(false);
       console.log(info.file);
+      setLoading(false);
       setImageUrl(info.file.url);
     }
   };

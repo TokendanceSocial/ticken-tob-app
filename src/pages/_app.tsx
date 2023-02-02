@@ -8,12 +8,12 @@ import { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { appWithTranslation } from 'next-i18next';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { mainnet, polygon, optimism, arbitrum, polygonMumbai } from 'wagmi/chains';
+import { polygon, polygonMumbai } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import CustomAvatar from '@/components/CustomAvatar';
 import { theme } from '@/constanst/rainbowKitTheme';
 const { chains, provider, webSocketProvider } = configureChains(
-  [mainnet, polygon, polygonMumbai, optimism, arbitrum],
+  [polygon, polygonMumbai],
   [publicProvider()],
 );
 
