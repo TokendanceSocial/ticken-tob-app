@@ -1,5 +1,3 @@
-@import 'antd/dist/reset.css';
-
 @font-face {
   font-family: Poppins;
   src: url('../../assets/fonts/Poppins/Poppins-Light.otf') format('opentype');
@@ -199,6 +197,9 @@ body {
           border-radius: 8px;
         }
       }
+      .ant-table-tbody > tr.ant-table-placeholder:hover > td {
+        background-color: transparent;
+      }
       .ant-table-cell-row-hover {
         background-color: transparent;
       }
@@ -393,5 +394,37 @@ body {
 .custom-avatar {
   svg {
     background-color: #eef;
+  }
+}
+
+.event-form {
+  > div {
+    margin-top: 20px;
+  }
+}
+
+.create-event-form {
+  &__title {
+    color: rgba(244, 244, 245, 0.9);
+    font-weight: 300;
+    line-height: 1;
+    margin: 12px 0 12px;
+    font-size: 2.5rem;
+  }
+  .ant-card-body {
+    overflow-x: auto;
+    .ant-form {
+      min-width: 700px;
+    }
+  }
+}
+
+.upload-cover {
+  width: 338px;
+  height: 158px;
+  .ant-upload-list.ant-upload-list-picture-card,
+  .ant-upload {
+    width: 100% !important;
+    height: 100% !important;
   }
 }
