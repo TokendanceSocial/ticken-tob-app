@@ -13,7 +13,7 @@ export async function fetchAirDropDetail(recordId: string) {
 }
 
 
-export async function addAirdrop(eventAddress: string) {
+export async function addAirdrop(eventAddress: string, list: string[]) {
   return;
 }
 
