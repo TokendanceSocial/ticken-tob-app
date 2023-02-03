@@ -1,14 +1,14 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
+import type { FormInstance } from 'antd';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 
-export default function AddAirdropForm() {
-  const [form] = Form.useForm();
+export default function AddAirdropForm({ form }: { form: FormInstance }) {
   const { t } = useTranslation();
   return (
     <Form form={form}>
-      <Form.List name='addresses'>
+      <Form.List name='list'>
         {(fields, { add, remove }, { errors }) => (
           <>
             {fields.map((field, index) => (

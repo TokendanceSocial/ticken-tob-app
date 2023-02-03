@@ -80,6 +80,7 @@ export default function AirDrop({
     ];
   }, [t]);
 
+  const [form] = Form.useForm();
   return (
     <Modal
       title={t('airdropTitle', {
@@ -96,10 +97,10 @@ export default function AirDrop({
               width: 600,
 
               title: t('addAirdrop'),
-              content: <AddAirdropForm />,
+              content: <AddAirdropForm form={form} />,
               onOk: async () => {
                 try {
-                  await addAirdrop(address);
+                  await addAirdrop(address, form.getFieldValue('list'));
                   run(address);
                   message.success(t('addSuccess'));
                 } catch (error) {
