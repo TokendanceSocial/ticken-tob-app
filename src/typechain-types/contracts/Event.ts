@@ -35,8 +35,10 @@ export declare namespace EventInfo {
     holdTime: PromiseOrValue<BigNumberish>;
     personLimit: PromiseOrValue<BigNumberish>;
     price: PromiseOrValue<BigNumberish>;
+    rebates: PromiseOrValue<BigNumberish>;
     metaURL: PromiseOrValue<string>;
     state: PromiseOrValue<BigNumberish>;
+    eventType: PromiseOrValue<BigNumberish>;
     contractAddress: PromiseOrValue<string>;
   };
 
@@ -46,7 +48,9 @@ export declare namespace EventInfo {
     BigNumber,
     BigNumber,
     BigNumber,
+    BigNumber,
     string,
+    number,
     number,
     string
   ] & {
@@ -55,8 +59,10 @@ export declare namespace EventInfo {
     holdTime: BigNumber;
     personLimit: BigNumber;
     price: BigNumber;
+    rebates: BigNumber;
     metaURL: string;
     state: number;
+    eventType: number;
     contractAddress: string;
   };
 
@@ -90,15 +96,15 @@ export declare namespace EventInfo {
 
 export interface EventInterface extends utils.Interface {
   functions: {
-    "addSigner(address)": FunctionFragment;
     "allUserInfo(address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "batchAddSigner(address[])": FunctionFragment;
     "batchMint(address[])": FunctionFragment;
     "closeEvent()": FunctionFragment;
     "eventEndTime()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
-    "initialize(string,string,uint256,uint256,uint256,string,address)": FunctionFragment;
+    "initialize(string,string,uint256,uint256,uint256,uint256,string,address,uint8)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "isClosed()": FunctionFragment;
     "isGoing()": FunctionFragment;
@@ -125,10 +131,10 @@ export interface EventInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "addSigner"
       | "allUserInfo"
       | "approve"
       | "balanceOf"
+      | "batchAddSigner"
       | "batchMint"
       | "closeEvent"
       | "eventEndTime"
@@ -159,10 +165,6 @@ export interface EventInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "addSigner",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "allUserInfo",
     values: [PromiseOrValue<string>]
   ): string;
@@ -173,6 +175,10 @@ export interface EventInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "balanceOf",
     values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "batchAddSigner",
+    values: [PromiseOrValue<string>[]]
   ): string;
   encodeFunctionData(
     functionFragment: "batchMint",
@@ -198,8 +204,10 @@ export interface EventInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
       PromiseOrValue<string>,
-      PromiseOrValue<string>
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
     ]
   ): string;
   encodeFunctionData(
@@ -286,13 +294,16 @@ export interface EventInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
-  decodeFunctionResult(functionFragment: "addSigner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "allUserInfo",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "batchAddSigner",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "batchMint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "closeEvent", data: BytesLike): Result;
   decodeFunctionResult(
@@ -467,11 +478,6 @@ export interface Event extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    addSigner(
-      a: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     allUserInfo(
       user: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -487,6 +493,11 @@ export interface Event extends BaseContract {
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    batchAddSigner(
+      alist: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     batchMint(
       to: PromiseOrValue<string>[],
@@ -510,8 +521,10 @@ export interface Event extends BaseContract {
       _holdTime: PromiseOrValue<BigNumberish>,
       _personLimit: PromiseOrValue<BigNumberish>,
       _price: PromiseOrValue<BigNumberish>,
+      _rebates: PromiseOrValue<BigNumberish>,
       _meta: PromiseOrValue<string>,
       _receiver: PromiseOrValue<string>,
+      _eventType: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -614,11 +627,6 @@ export interface Event extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  addSigner(
-    a: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   allUserInfo(
     user: PromiseOrValue<string>,
     overrides?: CallOverrides
@@ -634,6 +642,11 @@ export interface Event extends BaseContract {
     owner: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  batchAddSigner(
+    alist: PromiseOrValue<string>[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   batchMint(
     to: PromiseOrValue<string>[],
@@ -657,8 +670,10 @@ export interface Event extends BaseContract {
     _holdTime: PromiseOrValue<BigNumberish>,
     _personLimit: PromiseOrValue<BigNumberish>,
     _price: PromiseOrValue<BigNumberish>,
+    _rebates: PromiseOrValue<BigNumberish>,
     _meta: PromiseOrValue<string>,
     _receiver: PromiseOrValue<string>,
+    _eventType: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -761,11 +776,6 @@ export interface Event extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    addSigner(
-      a: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     allUserInfo(
       user: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -781,6 +791,11 @@ export interface Event extends BaseContract {
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    batchAddSigner(
+      alist: PromiseOrValue<string>[],
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     batchMint(
       to: PromiseOrValue<string>[],
@@ -802,8 +817,10 @@ export interface Event extends BaseContract {
       _holdTime: PromiseOrValue<BigNumberish>,
       _personLimit: PromiseOrValue<BigNumberish>,
       _price: PromiseOrValue<BigNumberish>,
+      _rebates: PromiseOrValue<BigNumberish>,
       _meta: PromiseOrValue<string>,
       _receiver: PromiseOrValue<string>,
+      _eventType: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -955,11 +972,6 @@ export interface Event extends BaseContract {
   };
 
   estimateGas: {
-    addSigner(
-      a: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     allUserInfo(
       user: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -974,6 +986,11 @@ export interface Event extends BaseContract {
     balanceOf(
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    batchAddSigner(
+      alist: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     batchMint(
@@ -998,8 +1015,10 @@ export interface Event extends BaseContract {
       _holdTime: PromiseOrValue<BigNumberish>,
       _personLimit: PromiseOrValue<BigNumberish>,
       _price: PromiseOrValue<BigNumberish>,
+      _rebates: PromiseOrValue<BigNumberish>,
       _meta: PromiseOrValue<string>,
       _receiver: PromiseOrValue<string>,
+      _eventType: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1103,11 +1122,6 @@ export interface Event extends BaseContract {
   };
 
   populateTransaction: {
-    addSigner(
-      a: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     allUserInfo(
       user: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -1122,6 +1136,11 @@ export interface Event extends BaseContract {
     balanceOf(
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    batchAddSigner(
+      alist: PromiseOrValue<string>[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     batchMint(
@@ -1146,8 +1165,10 @@ export interface Event extends BaseContract {
       _holdTime: PromiseOrValue<BigNumberish>,
       _personLimit: PromiseOrValue<BigNumberish>,
       _price: PromiseOrValue<BigNumberish>,
+      _rebates: PromiseOrValue<BigNumberish>,
       _meta: PromiseOrValue<string>,
       _receiver: PromiseOrValue<string>,
+      _eventType: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

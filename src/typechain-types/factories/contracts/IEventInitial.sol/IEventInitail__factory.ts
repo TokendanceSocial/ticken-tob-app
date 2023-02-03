@@ -38,6 +38,11 @@ const _abi = [
         type: "uint256",
       },
       {
+        internalType: "uint256",
+        name: "_rebates",
+        type: "uint256",
+      },
+      {
         internalType: "string",
         name: "_meta",
         type: "string",
@@ -46,6 +51,11 @@ const _abi = [
         internalType: "address payable",
         name: "owner",
         type: "address",
+      },
+      {
+        internalType: "enum EventInfo.EventType",
+        name: "_event_type",
+        type: "uint8",
       },
     ],
     name: "initialize",
