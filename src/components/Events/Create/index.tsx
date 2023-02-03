@@ -1,13 +1,23 @@
-import { DeploymentUnitOutlined, LeftOutlined, SaveOutlined } from '@ant-design/icons';
-import { Button, Col, Row } from 'antd';
+import { LeftOutlined, SaveOutlined } from '@ant-design/icons';
+import { Button, Col, Form, Row } from 'antd';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import EventForm from '../Form';
+import { EventType } from '@/constanst/events';
 
 export default function CreateEvent() {
   const { t } = useTranslation();
   const router = useRouter();
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue({
+      type: EventType.PublicSale,
+      price: 100,
+    });
+  }, [form]);
+
   return (
     <div className='create-event-form'>
       <h1 className='create-event-form__title'>{t('createEvent')}</h1>
@@ -24,7 +34,7 @@ export default function CreateEvent() {
         </Col>
       </Row>
 
-      <EventForm />
+      <EventForm form={form} />
     </div>
   );
 }

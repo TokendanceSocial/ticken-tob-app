@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { useSession } from 'next-auth/react';
 import React from 'react';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 import Root from '../Root';
 
 const Events = dynamic(() => import('../Events'), {
@@ -11,6 +12,10 @@ const Events = dynamic(() => import('../Events'), {
 });
 
 const CreateEvent = dynamic(() => import('../Events/Create'), {
+  ssr: false,
+});
+
+const EventDetail = dynamic(() => import('../Events/Detail'), {
   ssr: false,
 });
 
@@ -36,6 +41,10 @@ const router = createHashRouter([
             path: 'create',
             element: <CreateEvent />,
           },
+          {
+            path: 'detail',
+            element: <EventDetail />,
+          },
         ],
       },
     ],
@@ -43,7 +52,8 @@ const router = createHashRouter([
 ]);
 export default function App() {
   const session = useSession();
-  if (session.status === 'authenticated') {
+  const { isConnected } = useAccount();
+  if (session.status === 'authenticated' || isConnected) {
     return (
       <ConfigProvider
         theme={{

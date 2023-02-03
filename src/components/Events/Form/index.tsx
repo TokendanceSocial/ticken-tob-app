@@ -1,14 +1,12 @@
-import { Form } from 'antd';
+import type { FormInstance } from 'antd';
 import React from 'react';
-import Basic from './Basic';
-import EventTypeForm from './Type';
+import EventBasicForm from './EventBasicForm';
+import EventTypeForm from './EventTypeForm';
 
-export default function EventForm() {
-  const [form] = Form.useForm();
-
+export default function EventForm({ form }: { form: FormInstance }) {
   return (
-    <div className='event-form' onClick={() => console.log(form.getFieldsValue())}>
-      <Basic form={form} />
+    <div className='event-form'>
+      <EventBasicForm form={form} />
       <EventTypeForm form={form} />
     </div>
   );

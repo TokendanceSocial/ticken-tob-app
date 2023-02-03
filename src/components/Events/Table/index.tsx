@@ -77,7 +77,7 @@ export default function EventsTable(tableProps: {
           title: 'airdrop',
           icon: <WifiOutlined />,
         },
-        [EventState.Live, EventState.Draft].includes(record.basic.state) && {
+        record.basic.state === EventState.Live && {
           title: 'close',
           icon: <CloseOutlined />,
         },

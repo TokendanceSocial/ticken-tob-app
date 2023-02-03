@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
 import UploadCover from '@/components/UploadCover';
 
-export default function Basic({ form }: { form: FormInstance }) {
+export default function EventBasicForm({ form }: { form: FormInstance }) {
   const { t } = useTranslation();
   const eventName = useMemo(() => {
     return (
@@ -40,21 +40,38 @@ export default function Basic({ form }: { form: FormInstance }) {
   const eventTime = useMemo(() => {
     return (
       <Form.Item label={t('time')} name='time'>
-        <DatePicker />
+        <DatePicker style={{ width: '100% ' }} />
       </Form.Item>
     );
   }, [t]);
   const location = useMemo(() => {
     return (
       <Form.Item label={t('location')} name='location'>
-        <Input maxLength={40} showCount />
+        <Input
+          placeholder={
+            t('pleaseEnter', {
+              name: t('location'),
+            }) || ''
+          }
+          maxLength={40}
+          showCount
+        />
       </Form.Item>
     );
   }, [t]);
   const description = useMemo(() => {
     return (
       <Form.Item label={t('description')} name='description'>
-        <Input.TextArea maxLength={500} rows={4} showCount />
+        <Input.TextArea
+          placeholder={
+            t('pleaseEnter', {
+              name: t('description'),
+            }) || ''
+          }
+          maxLength={500}
+          rows={4}
+          showCount
+        />
       </Form.Item>
     );
   }, [t]);

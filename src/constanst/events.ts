@@ -1,17 +1,26 @@
 export enum EventState {
   Live,
   Close,
-  Draft
+}
+
+export enum EventType {
+  PublicSale,
+  InviteOnly
 }
 
 export const stateText = {
   [EventState.Live]: 'Live',
-  [EventState.Draft]: 'Draft',
   [EventState.Close]: 'Close',
+}
+
+export const typeText: Record<number, string> = {
+  [EventType.PublicSale]: 'publicSale',
+  [EventType.InviteOnly]: 'inviteOnly',
 }
 export interface BasicInfo {
   id: string;
   name: string;
+  type: EventType;
   symbol: string;
   holdTime: number;
   personLimit: number;
