@@ -1,16 +1,14 @@
-import { PlusOutlined, ProfileOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { useAntdTable } from 'ahooks';
-import { Button, Col, Form, Progress, Row, Table } from 'antd';
+import { Button, Col, Form, Row } from 'antd';
 import chunk from 'lodash/chunk';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import ListPage from '../ListPage';
-import EventsSearchForm from './SearchForm';
 import EventsTable from './Table';
 import { useEventList } from '@/abihooks';
-import { EventInfo } from '@/constanst/events';
+import { EventInfo } from '@/typechain-types/contracts/Admin';
 
 async function fetch() {
   return [];
@@ -20,19 +18,20 @@ export default function Events() {
   const [form] = Form.useForm();
   const { data, run } = useEventList();
   const router = useRouter();
-  const dataSource = useRef<EventInfo[]>();
+  const dataSource = useRef<EventInfo.AllInfoStructOutput[]>();
   const getTableData = useCallback(
     async ({ current, pageSize }: { current: number; pageSize: number }) => {
       if (!dataSource.current) {
-        dataSource.current = await fetch();
+        dataSource.current = await run();
       }
       const chunkData = chunk(dataSource.current, pageSize);
+      console.log(dataSource.current);
       return {
-        total: dataSource.current.length,
+        total: dataSource.current?.length || 0,
         list: chunkData[current - 1],
       };
     },
-    [],
+    [run],
   );
 
   const { tableProps } = useAntdTable(getTableData, {
