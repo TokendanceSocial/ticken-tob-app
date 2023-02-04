@@ -1,14 +1,20 @@
 // @ts-ignore
 // eslint-disable-next-line import/no-unresolved
 import { Provider } from '@ethersproject/providers';
+import { message } from 'antd';
 import { ContractTransaction } from 'ethers/lib/ethers';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useProvider, useAccount, useSigner } from 'wagmi';
 import { CONTRACT_ADDRESS } from '@/constanst/token';
 import { EventInfo } from '@/typechain-types/contracts/Admin';
 import { Admin__factory, Event__factory } from '@/typechain-types/index';
 
-export function useFetchAirDropList() { }
+export function useFetchAirDropList() {
+  return useAbi<string[], string>((provide, singer, account, _?: any) => {
+    const connect = Event__factory.connect(_, provide);
+    return connect.airdropUsers();
+  });
+}
 
 export function fetchAirDropDetail(recordId: string) {
   return {
@@ -20,16 +26,24 @@ export function fetchAirDropDetail(recordId: string) {
   };
 }
 
+export function useFetchWriteOffList() {
+  // 获取核销列表
+  return useAbi<string[], string>((provide, singer, account, _?: any) => {
+    const connect = Event__factory.connect(_, provide);
+    console.log(111111, _);
+    return connect.signerUsers();
+  });
+}
 export interface addAirdropReq {
   eventAddress: string;
   address: string[];
 }
 
-export function useAddAirdrop(eventAddress: string, address: string[]) {
+export function useAddAirdrop() {
   // 空投
-  const singer = useSigner();
-  return useAbi<ContractTransaction, addAirdropReq>((provide, account, _?: any) => {
-    const connect = Event__factory.connect(eventAddress, singer.data);
+
+  return useAbi<ContractTransaction, addAirdropReq>((provide, singer, account, _?: any) => {
+    const connect = Event__factory.connect(_.eventAddress, singer);
     return connect.batchMint(_.address);
   });
 }
@@ -38,16 +52,16 @@ export interface fetchEventDetailReq {
   eventAddress: string;
   address: string;
 }
-export function useFetchEventDetail(eventAddress: string, user?: string) {
-  return useAbi<EventInfo.AllInfoStructOutput, fetchEventDetailReq>((provide, account, _?: any) => {
-    const connect = Event__factory.connect(eventAddress, provide);
+export function useFetchEventDetail() {
+  return useAbi<EventInfo.AllInfoStructOutput, fetchEventDetailReq>((provide, singer, account, _?: any) => {
+    const connect = Event__factory.connect(_.eventAddress, provide);
     return connect.allUserInfo(_.address);
   });
 }
 
 export function useEventList() {
-  // 获取B端列表
-  return useAbi<EventInfo.AllInfoStructOutput[], any>((provide, account) => {
+
+  return useAbi<EventInfo.AllInfoStructOutput[], any>((provide, singer, account) => {
     const connect = Admin__factory.connect(CONTRACT_ADDRESS, provide);
     return connect.eventsForOwner(account.address);
   });
@@ -65,9 +79,8 @@ export interface createEventReq {
 }
 export function useCreateEvent() {
   // 创建活动
-  const singer = useSigner();
-  return useAbi<ContractTransaction, createEventReq>((provide, account, _: any) => {
-    const connect = Admin__factory.connect(CONTRACT_ADDRESS, singer.data);
+  return useAbi<ContractTransaction, createEventReq>((provide, singer: any, account, _: any) => {
+    const connect = Admin__factory.connect(CONTRACT_ADDRESS, singer);
     return connect.createEvent(
       _.name,
       _.symbol,
@@ -84,9 +97,8 @@ export function useCreateEvent() {
 
 export function useCloseEvent() {
   // 关闭活动
-  const singer = useSigner();
-  return useAbi<ContractTransaction, string>((provide, account, _?: any) => {
-    const connect = Event__factory.connect(_, singer.data);
+  return useAbi<ContractTransaction, string>((provide, singer, account, _?: any) => {
+    const connect = Event__factory.connect(_, singer);
     return connect.closeEvent();
   });
 }
@@ -97,32 +109,36 @@ export interface addWriteOffReq {
 }
 export function useAddWriteOff() {
   // 批量增加核销人
-  const singer = useSigner();
-  return useAbi<ContractTransaction, addWriteOffReq>((provide, account, _?: any) => {
-    const connect = Event__factory.connect(_.eventAddress, singer.data);
+  return useAbi<ContractTransaction, addWriteOffReq>((provide, singer, account, _?: any) => {
+    const connect = Event__factory.connect(_.eventAddress, singer);
     return connect.batchAddSigner(_.address);
   });
 }
 
-function useAbi<T extends any, U>(_run: (provide: Provider, account: any, req?: U) => Promise<T>) {
+function useAbi<T extends any, U>(_run: (provide: Provider, singer: any, account: any, req?: U) => Promise<T>) {
   const [data, setData] = useState<T>();
   const [error, setError] = useState<unknown>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const provide = useProvider();
   const account = useAccount();
-  const run = async (req?: U) => {
+  const singer = useSigner();
+  const run = useCallback(async (req?: U) => {
     setLoading(true);
     try {
-      const data = await _run(provide, account, req);
+      const data = await _run(provide, singer.data, account, req);
       setData(data);
       setLoading(false);
       return data;
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false);
+      message.error(error.toString());
       setError(error);
+      return Promise.reject(error)
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+
+  }, [_run, account, provide, singer.data]);
   return {
     data,
     run,

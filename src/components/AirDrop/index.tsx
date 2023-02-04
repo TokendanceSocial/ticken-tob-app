@@ -101,11 +101,9 @@ export default function AirDrop({
               onOk: async () => {
                 try {
                   await addAirdrop(address, form.getFieldValue('list'));
-                  run(address);
-                  message.success(t('addSuccess'));
-                } catch (error) {
-                  message.error(t('addFail'));
-                }
+                } catch (error) {}
+                run(address);
+                message.success(t('addSuccess'));
               },
             })
           }

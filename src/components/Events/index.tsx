@@ -21,8 +21,10 @@ export default function Events() {
     async ({ current, pageSize }: { current: number; pageSize: number }) => {
       if (!dataSource.current) {
         dataSource.current = [];
-        const data = await run();
-        if (!data) {
+        let data;
+        try {
+          data = await run();
+        } catch (error) {
           return {
             total: 0,
             list: [],

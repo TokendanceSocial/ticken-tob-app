@@ -75,10 +75,6 @@ export default function EventsTable(tableProps: {
   const router = useRouter();
   const [copySuccess, setCopySuccess] = useState(false);
   const { run: close, error: closeError } = useCloseEvent();
-  useEffect(() => {
-    if (!closeError) return;
-    message.error(closeError.toString());
-  }, [closeError]);
 
   const actionRender = useCallback(
     (_: string, record: EventInfo.AllInfoStructOutput['basic']) => {
@@ -97,7 +93,12 @@ export default function EventsTable(tableProps: {
         record.state === EventState.Live && {
           title: 'close',
           icon: <CloseOutlined />,
-          onClick: () => close(record.contractAddress),
+          onClick: async () => {
+            try {
+              await close(record.contractAddress);
+              message.success(t('closeSuccess'));
+            } catch (error) {}
+          },
         },
         {
           title: (

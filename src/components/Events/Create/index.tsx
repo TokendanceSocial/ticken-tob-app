@@ -24,11 +24,6 @@ export default function CreateEvent() {
     });
   }, [form]);
 
-  useEffect(() => {
-    if (!error) return;
-    message.error(error.toString());
-  }, [error]);
-
   const submit = useCallback(async () => {
     await form.validateFields();
     setloading(true);
