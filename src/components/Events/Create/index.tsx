@@ -68,7 +68,10 @@ export default function CreateEvent() {
       <h1 className='create-event-form__title'>{t('createEvent')}</h1>
       <Row justify='space-between'>
         <Col>
-          <Button icon={<LeftOutlined />} onClick={() => router.back()}>
+          <Button
+            icon={<LeftOutlined />}
+            onClick={() => router.push(router.asPath.replace(/\/create.*/, ''))}
+          >
             {t('back')}
           </Button>
         </Col>

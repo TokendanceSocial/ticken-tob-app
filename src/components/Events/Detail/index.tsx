@@ -1,14 +1,14 @@
-import { LeftOutlined, WifiOutlined } from '@ant-design/icons';
+import { CloseOutlined, LeftOutlined, WifiOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Row, Card, Descriptions, message, Skeleton } from 'antd';
 import moment from 'moment';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAccount, useBalance, useNetwork } from 'wagmi';
 import WriteOff from '../WriteOff';
-import { useFetchEventDetail } from '@/abihooks';
+import { useCloseEvent, useFetchEventDetail } from '@/abihooks';
 import AirDrop from '@/components/AirDrop';
+import { BACK_DELAY } from '@/constanst';
 import { EventType, typeText } from '@/constanst/events';
 import { getMeta, renderNftImg } from '@/utils/nftUpload';
 
@@ -60,12 +60,21 @@ export default function EventDetail() {
     return data?.basic;
   }, [data]);
 
+  const { run: close, error: closeError, loading: closeLoading } = useCloseEvent();
+
+  useEffect(() => {
+    if (!closeError) return;
+    message.error(closeError.toString());
+  }, [closeError]);
+
   useEffect(() => {
     if (!data?.basic) return;
     const metaURL = data?.basic.metaURL;
 
     getMeta(metaURL).then(setMeta);
   }, [data?.basic]);
+
+  console.log(data, basic?.price.toNumber());
 
   return loading ? (
     <Skeleton active />
@@ -74,7 +83,10 @@ export default function EventDetail() {
       <h1 className='event-detail__title'>{t('eventDetail')}</h1>
       <Row justify='space-between'>
         <Col>
-          <Button icon={<LeftOutlined />} onClick={() => router.back()}>
+          <Button
+            icon={<LeftOutlined />}
+            onClick={() => router.push(router.asPath.replace(/\/detail.*/, ''))}
+          >
             {t('back')}
           </Button>
         </Col>
@@ -86,6 +98,22 @@ export default function EventDetail() {
             icon={<WifiOutlined />}
           >
             {t('airdrop')}
+          </Button>
+          <Button
+            onClick={async () => {
+              await close(address);
+              message.success(t('closeSuccessContent'));
+              setTimeout(() => {
+                router.push(router.asPath.replace(/\/detail.*/, ''));
+              }, BACK_DELAY);
+            }}
+            type='primary'
+            danger
+            loading={closeLoading}
+            style={{ marginRight: 16 }}
+            icon={<CloseOutlined />}
+          >
+            {t('close')}
           </Button>
         </Col>
       </Row>
@@ -103,11 +131,14 @@ export default function EventDetail() {
             </Descriptions>
           </Col>
           <Col style={{ width: 336, height: 158 }}>
-            <img
-              src={renderNftImg(meta?.image || '')}
-              alt='cover'
-              style={{ width: 366, height: 158 }}
-            />
+            {
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={renderNftImg(meta?.image || '')}
+                alt='cover'
+                style={{ width: 366, height: 158 }}
+              />
+            }
           </Col>
         </Row>
       </Card>
@@ -116,9 +147,9 @@ export default function EventDetail() {
           <Descriptions.Item label={t('eventType')}>
             {typeText[basic?.eventType || 0]}
           </Descriptions.Item>
-          <Descriptions.Item
-            label={t('price')}
-          >{`${basic?.price} ${balance?.symbol}`}</Descriptions.Item>
+          <Descriptions.Item label={t('price')}>{`${basic?.price.toNumber()} ${
+            balance?.symbol
+          }`}</Descriptions.Item>
           {basic?.eventType === EventType.InviteOnly && (
             <Descriptions.Item label={t('rebates')}>{`${
               Number(basic?.rebates) / 10
@@ -126,7 +157,7 @@ export default function EventDetail() {
           )}
         </Descriptions>
       </Card>
-      <WriteOff />
+      <WriteOff eventAddress={address} />
       <AirDrop
         onCancel={() => setAirdropOpen(false)}
         open={airdropOpen}

@@ -6,11 +6,12 @@ import {
   ShareAltOutlined,
   WifiOutlined,
 } from '@ant-design/icons';
-import { Button, Skeleton, Table, Tooltip } from 'antd';
+import { Button, Skeleton, Table, Tooltip, message } from 'antd';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCloseEvent } from '@/abihooks';
 import { EventState, stateText, typeText } from '@/constanst/events';
 import { EventInfo } from '@/typechain-types/contracts/Admin';
 import { copy } from '@/utils/copy';
@@ -73,6 +74,12 @@ export default function EventsTable(tableProps: {
   const { t } = useTranslation();
   const router = useRouter();
   const [copySuccess, setCopySuccess] = useState(false);
+  const { run: close, error: closeError } = useCloseEvent();
+  useEffect(() => {
+    if (!closeError) return;
+    message.error(closeError.toString());
+  }, [closeError]);
+
   const actionRender = useCallback(
     (_: string, record: EventInfo.AllInfoStructOutput['basic']) => {
       const btns = [
@@ -90,6 +97,7 @@ export default function EventsTable(tableProps: {
         record.state === EventState.Live && {
           title: 'close',
           icon: <CloseOutlined />,
+          onClick: () => close(record.contractAddress),
         },
         {
           title: (
@@ -121,7 +129,7 @@ export default function EventsTable(tableProps: {
         </Tooltip>
       ));
     },
-    [copySuccess, router],
+    [close, copySuccess, router],
   );
 
   const columns = useMemo(() => {
@@ -133,5 +141,13 @@ export default function EventsTable(tableProps: {
     });
   }, [actionRender, t]);
 
-  return <Table rowKey='id' key='2' className='ticken-table' columns={columns} {...tableProps} />;
+  return (
+    <Table
+      rowKey='contactAddress'
+      key='2'
+      className='ticken-table'
+      columns={columns}
+      {...tableProps}
+    />
+  );
 }

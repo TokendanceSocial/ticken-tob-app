@@ -1,11 +1,18 @@
 import { MinusCircleOutlined, PlusOutlined, SaveOutlined } from '@ant-design/icons';
-import { Button, Card, Form, Input } from 'antd';
-import React from 'react';
+import { Button, Card, Form, Input, message } from 'antd';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAddWriteOff } from '@/abihooks';
 
-export default function WriteOff() {
+export default function WriteOff({ eventAddress }: { eventAddress: string }) {
   const { t } = useTranslation();
   const [form] = Form.useForm();
+  const { run, error, loading } = useAddWriteOff();
+  useEffect(() => {
+    if (!error) return;
+    message.error(error.toString());
+  }, [error]);
+
   return (
     <Card
       title={t('writeOff')}
@@ -14,9 +21,15 @@ export default function WriteOff() {
           icon={<SaveOutlined />}
           onClick={async () => {
             await form.validateFields();
-            console.log(form.getFieldsValue());
+            const address = form.getFieldValue('addresses');
+            await run({
+              address,
+              eventAddress,
+            });
+            message.success(t('writeOffSucces'));
           }}
           type='primary'
+          loading={loading}
         >
           {t('save')}
         </Button>
@@ -34,12 +47,6 @@ export default function WriteOff() {
                     rules={[
                       {
                         required: true,
-                        message: t('pleaseInputAddress') || '',
-                      },
-                      {
-                        len: 25,
-                        type: 'string',
-                        message: t('addressValidate') || '',
                       },
                     ]}
                     noStyle

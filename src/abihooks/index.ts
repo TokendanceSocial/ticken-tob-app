@@ -10,7 +10,7 @@ import { Admin__factory, Event__factory } from '@/typechain-types/index';
 
 export function useFetchAirDropList() { }
 
-export async function fetchAirDropDetail(recordId: string) {
+export function fetchAirDropDetail(recordId: string) {
   return {
     operationTime: 0,
     operationAddress: '',
@@ -27,8 +27,9 @@ export interface addAirdropReq {
 
 export function useAddAirdrop(eventAddress: string, address: string[]) {
   // 空投
+  const singer = useSigner();
   return useAbi<ContractTransaction, addAirdropReq>((provide, account, _?: any) => {
-    const connect = Event__factory.connect(eventAddress, provide);
+    const connect = Event__factory.connect(eventAddress, singer.data);
     return connect.batchMint(_.address);
   });
 }
@@ -66,7 +67,6 @@ export function useCreateEvent() {
   // 创建活动
   const singer = useSigner();
   return useAbi<ContractTransaction, createEventReq>((provide, account, _: any) => {
-    console.log(singer);
     const connect = Admin__factory.connect(CONTRACT_ADDRESS, singer.data);
     return connect.createEvent(
       _.name,
@@ -82,10 +82,11 @@ export function useCreateEvent() {
   });
 }
 
-export async function useCloseEvent(eventAddress: string) {
+export function useCloseEvent() {
   // 关闭活动
-  return useAbi<ContractTransaction, string>((provide, account, _) => {
-    const connect = Event__factory.connect(eventAddress, provide);
+  const singer = useSigner();
+  return useAbi<ContractTransaction, string>((provide, account, _?: any) => {
+    const connect = Event__factory.connect(_, singer.data);
     return connect.closeEvent();
   });
 }
@@ -94,10 +95,11 @@ export interface addWriteOffReq {
   eventAddress: string;
   address: string[];
 }
-export async function useAddWriteOff() {
+export function useAddWriteOff() {
   // 批量增加核销人
+  const singer = useSigner();
   return useAbi<ContractTransaction, addWriteOffReq>((provide, account, _?: any) => {
-    const connect = Event__factory.connect(_.eventAddress, provide);
+    const connect = Event__factory.connect(_.eventAddress, singer.data);
     return connect.batchAddSigner(_.address);
   });
 }
@@ -113,8 +115,10 @@ function useAbi<T extends any, U>(_run: (provide: Provider, account: any, req?: 
     try {
       const data = await _run(provide, account, req);
       setData(data);
+      setLoading(false);
       return data;
     } catch (error) {
+      setLoading(false);
       setError(error);
     }
     setLoading(false);
