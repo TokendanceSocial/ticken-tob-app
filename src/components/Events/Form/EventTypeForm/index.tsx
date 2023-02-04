@@ -16,7 +16,7 @@ export default function EventTypeForm({ form }: { form: FormInstance }) {
 
   const type = useMemo(() => {
     return (
-      <Form.Item name='type'>
+      <Form.Item name='eventType'>
         <Radio.Group>
           {Object.keys(typeText).map((key) => (
             <Radio key={key} value={Number(key)}>
@@ -30,7 +30,15 @@ export default function EventTypeForm({ form }: { form: FormInstance }) {
 
   const price = useMemo(() => {
     return (
-      <Form.Item label={t('price')} name='price'>
+      <Form.Item
+        label={t('price')}
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+        name='price'
+      >
         <InputNumber addonAfter={data?.symbol} min={0} style={{ width: 200 }} />
       </Form.Item>
     );
@@ -40,11 +48,11 @@ export default function EventTypeForm({ form }: { form: FormInstance }) {
     return (
       <Form.Item
         shouldUpdate={(prev, cur) => {
-          return prev.type !== cur.type;
+          return prev.eventType !== cur.eventType;
         }}
       >
         {() => {
-          if (form.getFieldValue('type') === EventType.PublicSale) return null;
+          if (form.getFieldValue('eventType') === EventType.PublicSale) return null;
           return (
             <Form.Item label={t('rebates')} name='rebates'>
               <InputNumber addonAfter='%' min={0} max={100} precision={1} style={{ width: 100 }} />

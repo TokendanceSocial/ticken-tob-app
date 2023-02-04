@@ -37,7 +37,7 @@ export interface fetchEventDetailReq {
   eventAddress: string;
   address: string;
 }
-export function useFetchEventDetail(eventAddress: string, user: string) {
+export function useFetchEventDetail(eventAddress: string, user?: string) {
   return useAbi<EventInfo.AllInfoStructOutput, fetchEventDetailReq>((provide, account, _?: any) => {
     const connect = Event__factory.connect(eventAddress, provide);
     return connect.allUserInfo(_.address);
@@ -55,9 +55,9 @@ export interface createEventReq {
   name: string; // 名称
   symbol: string; // 活动缩写
   holdTime: number; // 时间
-  personLimit: number; // 人数限制
+  personLimit?: number; // 人数限制
   price: number; // 价格
-  rebates: number; // 返佣比例
+  rebates?: number; // 返佣比例
   meta: string; // 元数据
   receiver: string; // 返佣收款人（填写创建者地址）
   eventType: 0 | 1; // 如0为公售，1为仅限邀请

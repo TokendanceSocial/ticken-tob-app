@@ -2,13 +2,16 @@ import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { Upload } from 'antd';
 import type { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import ImgCrop from 'antd-img-crop';
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+const getBase64 = (img: RcFile, callback: (url: string) => void) => {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result as string));
+  reader.readAsDataURL(img);
+};
 
-export default function UploadCover(props?: {
-  value?: string;
-  onChange?: (value: string) => void;
-}) {
+export default function UploadCover(props?: { value?: File; onChange?: (file: File) => void }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>();
@@ -20,9 +23,15 @@ export default function UploadCover(props?: {
     }
     if (info.file.status === 'done') {
       // Get this url from response in real world.
-      console.log(info.file);
-      setLoading(false);
-      setImageUrl(info.file.url);
+      // uploadImage(info.file.name, info.file.originFileObj as File).then((res) => {
+      //   setLoading(false);
+      //   setImageUrl(res);
+      // });
+      getBase64(info.file.originFileObj as RcFile, (url) => {
+        setLoading(false);
+        props?.onChange?.(info.file.originFileObj as File);
+        setImageUrl(url);
+      });
     }
   };
 

@@ -1,10 +1,11 @@
 // ipfs metadat 后面可迁移到S3
+import axios from 'axios';
 import { NFTStorage } from 'nft.storage';
 import { NFT_STORAGE_TOKEN } from '@/constanst/token';
 
-const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
 
 export const nftUpload = async (data: any): Promise<string> => {
+  const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
   const metadata = await client.store(data);
   if (!(metadata as any).ipnft) {
     return Promise.reject('元数据生成失败');
@@ -26,3 +27,18 @@ export const renderNftImg = (image: string) => {
   }
   return image;
 };
+
+export async function uploadImage(mata: {
+  name: string;
+  description: string;
+  image: File;
+  location: string;
+}) {
+  const res = await nftUpload(mata);
+  const data = await axios
+    .request({
+      method: 'get',
+      url: res,
+    })
+  return data.data;
+}

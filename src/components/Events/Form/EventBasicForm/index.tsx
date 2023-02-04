@@ -8,7 +8,15 @@ export default function EventBasicForm({ form }: { form: FormInstance }) {
   const { t } = useTranslation();
   const eventName = useMemo(() => {
     return (
-      <Form.Item label={t('eventName')} name='name'>
+      <Form.Item
+        label={t('eventName')}
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+        name='name'
+      >
         <Input
           placeholder={
             t('pleaseEnter', {
@@ -39,14 +47,30 @@ export default function EventBasicForm({ form }: { form: FormInstance }) {
 
   const eventTime = useMemo(() => {
     return (
-      <Form.Item label={t('time')} name='time'>
+      <Form.Item
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+        label={t('time')}
+        name='holdTime'
+      >
         <DatePicker style={{ width: '100% ' }} />
       </Form.Item>
     );
   }, [t]);
   const location = useMemo(() => {
     return (
-      <Form.Item label={t('location')} name='location'>
+      <Form.Item
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+        label={t('location')}
+        name='location'
+      >
         <Input
           placeholder={
             t('pleaseEnter', {
@@ -61,7 +85,15 @@ export default function EventBasicForm({ form }: { form: FormInstance }) {
   }, [t]);
   const description = useMemo(() => {
     return (
-      <Form.Item label={t('description')} name='description'>
+      <Form.Item
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+        label={t('description')}
+        name='description'
+      >
         <Input.TextArea
           placeholder={
             t('pleaseEnter', {
@@ -77,7 +109,15 @@ export default function EventBasicForm({ form }: { form: FormInstance }) {
   }, [t]);
   const cover = useMemo(() => {
     return (
-      <Form.Item label={t('cover')} name='cover'>
+      <Form.Item
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+        label={t('cover')}
+        name='image'
+      >
         <UploadCover />
       </Form.Item>
     );
@@ -86,7 +126,13 @@ export default function EventBasicForm({ form }: { form: FormInstance }) {
     <Card title={t('eventBasic')}>
       <Form layout='vertical' form={form}>
         <Row>
-          <Col flex={1}>{[eventName, eventSymbol, eventTime, location, description]}</Col>
+          <Col flex={1}>
+            {eventName}
+            {eventSymbol}
+            {eventTime}
+            {location}
+            {description}
+          </Col>
           <Col style={{ width: 336, height: 158, marginLeft: 20 }}>{cover}</Col>
         </Row>
       </Form>

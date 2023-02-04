@@ -16,7 +16,7 @@ export default function AirDrop({
   onCancel,
 }: {
   address: string;
-  name: string;
+  name?: string;
   open: boolean;
   onCancel: () => void;
 }) {
