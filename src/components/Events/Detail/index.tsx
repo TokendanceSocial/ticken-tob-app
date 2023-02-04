@@ -1,5 +1,5 @@
 import { LeftOutlined, WifiOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Row, Card, Descriptions, message } from 'antd';
+import { Button, Col, Form, Row, Card, Descriptions, message, Skeleton } from 'antd';
 import moment from 'moment';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -9,7 +9,7 @@ import { useAccount, useBalance, useNetwork } from 'wagmi';
 import WriteOff from '../WriteOff';
 import { useFetchEventDetail } from '@/abihooks';
 import AirDrop from '@/components/AirDrop';
-import { EventType } from '@/constanst/events';
+import { EventType, typeText } from '@/constanst/events';
 import { getMeta, renderNftImg } from '@/utils/nftUpload';
 
 export default function EventDetail() {
@@ -45,11 +45,14 @@ export default function EventDetail() {
     message.error(error.toString());
   }, [error]);
 
+  const [loading, setloading] = useState(false);
+
   useEffect(() => {
+    setloading(true);
     run({
       eventAddress: address,
       address: accountAddress || '',
-    });
+    }).then((res) => setloading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountAddress, address]);
 
@@ -64,7 +67,9 @@ export default function EventDetail() {
     getMeta(metaURL).then(setMeta);
   }, [data?.basic]);
 
-  return (
+  return loading ? (
+    <Skeleton active />
+  ) : (
     <div className='event-detail'>
       <h1 className='event-detail__title'>{t('eventDetail')}</h1>
       <Row justify='space-between'>
@@ -108,13 +113,17 @@ export default function EventDetail() {
       </Card>
       <Card title={t('eventType')}>
         <Descriptions column={1} layout='vertical'>
-          <Descriptions.Item label={t('eventType')}>{basic?.eventType}</Descriptions.Item>
+          <Descriptions.Item label={t('eventType')}>
+            {typeText[basic?.eventType || 0]}
+          </Descriptions.Item>
           <Descriptions.Item
             label={t('price')}
           >{`${basic?.price} ${balance?.symbol}`}</Descriptions.Item>
-          <Descriptions.Item label={t('rebates')}>{`${
-            Number(basic?.rebates) / 10
-          }%`}</Descriptions.Item>
+          {basic?.eventType === EventType.InviteOnly && (
+            <Descriptions.Item label={t('rebates')}>{`${
+              Number(basic?.rebates) / 10
+            }%`}</Descriptions.Item>
+          )}
         </Descriptions>
       </Card>
       <WriteOff />

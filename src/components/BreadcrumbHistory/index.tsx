@@ -3,8 +3,19 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { useCallback } from 'react';
-import { breadcrumbNameMap } from '@/constanst/breadcrumb';
 
+function getBreadcrumbName(path: string) {
+  if (path.includes('events/create')) {
+    return 'createEvent';
+  }
+  if (path.includes('events/detail')) {
+    return 'eventDetail';
+  }
+  if (path.includes('events')) {
+    return 'eventList';
+  }
+  return '';
+}
 export default function BreadcrumbHistory() {
   const { t } = useTranslation();
   const router = useRouter();
@@ -14,12 +25,12 @@ export default function BreadcrumbHistory() {
     return pathSnippets.map((_, index) => {
       const path = `/${pathSnippets.slice(0, index + 1).join('/')}`;
       if (index === pathSnippets.length - 1) {
-        return <Breadcrumb.Item key={path}>{t(breadcrumbNameMap[path])}</Breadcrumb.Item>;
+        return <Breadcrumb.Item key={path}>{t(getBreadcrumbName(path))}</Breadcrumb.Item>;
       }
 
       return (
         <Breadcrumb.Item key={path}>
-          <Link href={`/#/${path}`}>{t(breadcrumbNameMap[path])}</Link>
+          <Link href={`/#/${path}`}>{t(getBreadcrumbName(path))}</Link>
         </Breadcrumb.Item>
       );
     });

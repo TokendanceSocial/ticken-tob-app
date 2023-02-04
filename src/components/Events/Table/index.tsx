@@ -6,7 +6,7 @@ import {
   ShareAltOutlined,
   WifiOutlined,
 } from '@ant-design/icons';
-import { Button, Table, Tooltip } from 'antd';
+import { Button, Skeleton, Table, Tooltip } from 'antd';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -21,6 +21,8 @@ const getColumns = (actionRender: (...args: any) => JSX.Element[]) => [
     dataIndex: 'image',
     key: 'image',
     render(image: string) {
+      if (!image) return <Skeleton.Image active />;
+      // eslint-disable-next-line @next/next/no-img-element
       return <img alt='cover' src={image} width={100} />;
     },
   },

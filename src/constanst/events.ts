@@ -14,8 +14,8 @@ export const stateText = {
 }
 
 export const typeText: Record<number, string> = {
-  [EventType.PublicSale]: 'publicSale',
-  [EventType.InviteOnly]: 'inviteOnly',
+  [EventType.PublicSale]: 'Public Sale',
+  [EventType.InviteOnly]: 'Invite Only',
 }
 export interface BasicInfo {
   id: string;
