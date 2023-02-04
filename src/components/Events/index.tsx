@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import ListPage from '../ListPage';
 import EventsSearchForm from './SearchForm';
 import EventsTable from './Table';
+import { useEventList } from '@/abihooks';
 import { EventInfo } from '@/constanst/events';
 
 async function fetch() {
@@ -17,6 +18,7 @@ async function fetch() {
 export default function Events() {
   const { t } = useTranslation();
   const [form] = Form.useForm();
+  const { data, run } = useEventList();
   const router = useRouter();
   const dataSource = useRef<EventInfo[]>();
   const getTableData = useCallback(

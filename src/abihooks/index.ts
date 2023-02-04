@@ -20,33 +20,17 @@ export async function fetchAirDropDetail(recordId: string) {
   };
 }
 
+export interface addAirdropReq {
+  eventAddress: string;
+  address: string[];
+}
+
 export function useAddAirdrop(eventAddress: string, address: string[]) {
   // 空投
-  const [data, setData] = useState<ContractTransaction>();
-  const [error, setError] = useState<unknown>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const provide = useProvider();
-  const account = useAccount();
-  const run = async () => {
+  return useAbi<ContractTransaction, addAirdropReq>((provide, account, _) => {
     const connect = Event__factory.connect(eventAddress, provide);
-    if (account.address) {
-      try {
-        setLoading(true);
-        const _data = await connect.batchMint(address);
-        setData(_data);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
-      }
-    }
-  };
-  return {
-    data,
-    run,
-    error,
-    loading,
-  };
+    return connect.batchMint(_.address);
+  });
 }
 
 export interface fetchEventDetailReq {
@@ -127,6 +111,7 @@ function useAbi<T, U>(_run: (provide: Provider, account: any, req: U) => Promise
     try {
       const data = await _run(provide, account, req);
       setData(data);
+      return data;
     } catch (error) {
       setError(error);
     }
