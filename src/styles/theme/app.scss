@@ -420,6 +420,15 @@ body {
   }
 }
 
+.event-detail {
+  &__title {
+    color: rgba(244, 244, 245, 0.9);
+    font-weight: 300;
+    line-height: 1;
+    margin: 12px 0 12px;
+    font-size: 2.5rem;
+  }
+}
 .upload-cover {
   width: 338px;
   height: 158px;

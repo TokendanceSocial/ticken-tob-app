@@ -8,19 +8,20 @@ import {
 } from '@ant-design/icons';
 import { Button, Table, Tooltip } from 'antd';
 import moment from 'moment';
-import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { useCallback, useMemo, useState } from 'react';
-import { EventInfo, EventState, stateText } from '@/constanst/events';
+import { EventState, stateText, typeText } from '@/constanst/events';
+import { EventInfo } from '@/typechain-types/contracts/Admin';
 import { copy } from '@/utils/copy';
 
 const getColumns = (actionRender: (...args: any) => JSX.Element[]) => [
   {
     title: '#',
-    dataIndex: 'cover',
-    key: 'cover',
-    render(val: string) {
-      return <Image alt='cover' src={val} width={100} />;
+    dataIndex: 'image',
+    key: 'image',
+    render(image: string) {
+      return <img alt='cover' src={image} width={100} />;
     },
   },
   {
@@ -30,8 +31,11 @@ const getColumns = (actionRender: (...args: any) => JSX.Element[]) => [
   },
   {
     title: 'eventType',
-    dataIndex: 'symbol',
-    key: 'symbol',
+    dataIndex: 'eventType',
+    key: 'eventType',
+    render(type: number) {
+      return typeText[type];
+    },
   },
 
   {
@@ -39,7 +43,7 @@ const getColumns = (actionRender: (...args: any) => JSX.Element[]) => [
     dataIndex: 'holdTime',
     key: 'holdTime',
     render(time: number) {
-      return moment(time).format('LL');
+      return moment.unix(time).format('LL');
     },
   },
   {
@@ -65,30 +69,33 @@ export default function EventsTable(tableProps: {
   pagination: any;
 }) {
   const { t } = useTranslation();
+  const router = useRouter();
   const [copySuccess, setCopySuccess] = useState(false);
   const actionRender = useCallback(
-    (_: string, record: EventInfo) => {
+    (_: string, record: EventInfo.AllInfoStructOutput['basic']) => {
       const btns = [
         {
           title: 'detail',
           icon: <ProfileOutlined />,
+          onClick: () => {
+            router.push(`${router.asPath}/detail?address=${record.contractAddress}`);
+          },
         },
-        record.basic.state === EventState.Live && {
+        record.state === EventState.Live && {
           title: 'airdrop',
           icon: <WifiOutlined />,
         },
-        record.basic.state === EventState.Live && {
+        record.state === EventState.Live && {
           title: 'close',
           icon: <CloseOutlined />,
         },
         {
           title: (
             <div>
-              <span>{`${location.href}/${record.basic.id}`}</span>
               <Button
                 onClick={async () => {
                   try {
-                    await copy(`${location.href}/${record.basic.id}`);
+                    // await copy(`${location.href}/${record.basic.id}`);
                     setCopySuccess(true);
                   } catch (error) {
                     setCopySuccess(false);
@@ -103,15 +110,16 @@ export default function EventsTable(tableProps: {
       ].filter(Boolean) as {
         title: string;
         icon: JSX.Element;
+        onClick?: () => void;
       }[];
 
       return btns.map((btn) => (
         <Tooltip key={btn.title} title={btn.title}>
-          <Button icon={btn.icon} />
+          <Button onClick={btn.onClick} icon={btn.icon} />
         </Tooltip>
       ));
     },
-    [copySuccess],
+    [copySuccess, router],
   );
 
   const columns = useMemo(() => {

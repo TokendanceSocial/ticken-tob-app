@@ -28,17 +28,15 @@ export const renderNftImg = (image: string) => {
   return image;
 };
 
-export async function uploadImage(mata: {
-  name: string;
-  description: string;
-  image: File;
+export async function getMeta(mataURL: string): Promise<{
+  image: string;
   location: string;
-}) {
-  const res = await nftUpload(mata);
+  description: string;
+}> {
   const data = await axios
     .request({
       method: 'get',
-      url: res,
-    })
+      url: mataURL,
+    });
   return data.data;
 }

@@ -5,24 +5,39 @@ import chunk from 'lodash/chunk';
 import { useRouter } from 'next/router';
 import React, { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { renderNftImg, getMeta } from '../../utils/nftUpload';
 import ListPage from '../ListPage';
 import EventsTable from './Table';
 import { useEventList } from '@/abihooks';
 import { EventInfo } from '@/typechain-types/contracts/Admin';
 
-async function fetch() {
-  return [];
-}
 export default function Events() {
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const { data, run } = useEventList();
+  const { run } = useEventList();
   const router = useRouter();
-  const dataSource = useRef<EventInfo.AllInfoStructOutput[]>();
+  const dataSource = useRef<EventInfo.AllInfoStructOutput['basic'][]>();
   const getTableData = useCallback(
     async ({ current, pageSize }: { current: number; pageSize: number }) => {
       if (!dataSource.current) {
-        dataSource.current = await run();
+        dataSource.current = [];
+        const data = await run();
+        if (!data) {
+          return {
+            total: 0,
+            list: [],
+          };
+        }
+
+        for (let index = 0; index < data.length; index++) {
+          const item = data[index];
+          const { image } = await getMeta(item.basic.metaURL);
+          dataSource.current.push({
+            ...item.basic,
+            // @ts-ignore
+            image: renderNftImg(image),
+          });
+        }
       }
       const chunkData = chunk(dataSource.current, pageSize);
       console.log(dataSource.current);

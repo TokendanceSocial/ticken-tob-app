@@ -3,7 +3,7 @@
 import { Provider } from '@ethersproject/providers';
 import { ContractTransaction } from 'ethers/lib/ethers';
 import { useState } from 'react';
-import { useProvider, useAccount } from 'wagmi';
+import { useProvider, useAccount, useSigner } from 'wagmi';
 import { CONTRACT_ADDRESS } from '@/constanst/token';
 import { EventInfo } from '@/typechain-types/contracts/Admin';
 import { Admin__factory, Event__factory } from '@/typechain-types/index';
@@ -64,8 +64,10 @@ export interface createEventReq {
 }
 export function useCreateEvent() {
   // 创建活动
+  const singer = useSigner();
   return useAbi<ContractTransaction, createEventReq>((provide, account, _: any) => {
-    const connect = Admin__factory.connect(CONTRACT_ADDRESS, provide);
+    console.log(singer);
+    const connect = Admin__factory.connect(CONTRACT_ADDRESS, singer.data);
     return connect.createEvent(
       _.name,
       _.symbol,

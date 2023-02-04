@@ -1,5 +1,4 @@
 import { LeftOutlined, WifiOutlined } from '@ant-design/icons';
-import { useRequest } from 'ahooks';
 import { Button, Col, Form, Row, Card, Descriptions, message } from 'antd';
 import moment from 'moment';
 import Image from 'next/image';
@@ -11,15 +10,21 @@ import WriteOff from '../WriteOff';
 import { useFetchEventDetail } from '@/abihooks';
 import AirDrop from '@/components/AirDrop';
 import { EventType } from '@/constanst/events';
+import { getMeta, renderNftImg } from '@/utils/nftUpload';
 
 export default function EventDetail() {
   const { t } = useTranslation();
   const router = useRouter();
   const [form] = Form.useForm();
 
+  const [meta, setMeta] = useState<{
+    image: string;
+    location: string;
+    description: string;
+  }>();
   const address = useMemo(() => {
-    return router.query.address as string;
-  }, [router.query.address]);
+    return router.asPath.split('=')[1];
+  }, [router.asPath]);
   const { data, run, error } = useFetchEventDetail(address);
   const { address: accountAddress } = useAccount();
   const { chain } = useNetwork();
@@ -45,13 +50,23 @@ export default function EventDetail() {
       eventAddress: address,
       address: accountAddress || '',
     });
-  }, [accountAddress, address, run]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accountAddress, address]);
 
-  const basic = useMemo(() => data?.basic, [data]);
+  const basic = useMemo(() => {
+    return data?.basic;
+  }, [data]);
+
+  useEffect(() => {
+    if (!data?.basic) return;
+    const metaURL = data?.basic.metaURL;
+
+    getMeta(metaURL).then(setMeta);
+  }, [data?.basic]);
 
   return (
-    <div className='create-event-form'>
-      <h1 className='create-event-form__title'>{t('eventDetail')}</h1>
+    <div className='event-detail'>
+      <h1 className='event-detail__title'>{t('eventDetail')}</h1>
       <Row justify='space-between'>
         <Col>
           <Button icon={<LeftOutlined />} onClick={() => router.back()}>
@@ -71,29 +86,35 @@ export default function EventDetail() {
       </Row>
       <Card title={t('eventBasic')}>
         <Row>
-          <Col>
-            <Descriptions layout='vertical'>
+          <Col style={{ width: 'calc(100% - 356px)', paddingRight: 20 }}>
+            <Descriptions column={1} layout='vertical'>
               <Descriptions.Item label={t('name')}>{basic?.name}</Descriptions.Item>
               <Descriptions.Item label={t('symbol')}>{basic?.symbol}</Descriptions.Item>
               <Descriptions.Item label={t('holdTime')}>
-                {moment.unix(basic?.holdTime).format('LL')}
+                {moment.unix(Number(basic?.holdTime)).format('LL')}
               </Descriptions.Item>
-              <Descriptions.Item label={t('location')}>{basic?.location}</Descriptions.Item>
-              <Descriptions.Item label={t('description')}>{basic?.description}</Descriptions.Item>
+              <Descriptions.Item label={t('location')}>{meta?.location}</Descriptions.Item>
+              <Descriptions.Item label={t('description')}>{meta?.description}</Descriptions.Item>
             </Descriptions>
           </Col>
-          <Col>
-            <Image src={basic?.image || ''} alt='cover' width={366} height={158} />
+          <Col style={{ width: 336, height: 158 }}>
+            <img
+              src={renderNftImg(meta?.image || '')}
+              alt='cover'
+              style={{ width: 366, height: 158 }}
+            />
           </Col>
         </Row>
       </Card>
       <Card title={t('eventType')}>
-        <Descriptions layout='vertical'>
+        <Descriptions column={1} layout='vertical'>
           <Descriptions.Item label={t('eventType')}>{basic?.eventType}</Descriptions.Item>
           <Descriptions.Item
             label={t('price')}
           >{`${basic?.price} ${balance?.symbol}`}</Descriptions.Item>
-          <Descriptions.Item label={t('rebates')}>{`${basic?.rebates / 10}%`}</Descriptions.Item>
+          <Descriptions.Item label={t('rebates')}>{`${
+            Number(basic?.rebates) / 10
+          }%`}</Descriptions.Item>
         </Descriptions>
       </Card>
       <WriteOff />

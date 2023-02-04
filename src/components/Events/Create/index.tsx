@@ -2,7 +2,7 @@ import { LeftOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Row, message } from 'antd';
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAccount } from 'wagmi';
 import EventForm from '../Form';
@@ -13,6 +13,7 @@ export default function CreateEvent() {
   const { t } = useTranslation();
   const router = useRouter();
   const [form] = Form.useForm();
+  const [loading, setloading] = useState(false);
   const { run, error } = useCreateEvent();
 
   const { address } = useAccount();
@@ -30,6 +31,7 @@ export default function CreateEvent() {
 
   const submit = useCallback(async () => {
     await form.validateFields();
+    setloading(true);
     const formData = form.getFieldsValue();
     const mata = {
       name: formData.name,
@@ -40,23 +42,26 @@ export default function CreateEvent() {
 
     try {
       const res = await nftUpload(mata);
-      const data = {
+
+      const data = await run({
         name: formData.name,
         symbol: formData.symbol,
         eventType: formData.eventType,
         holdTime: moment(formData.holdTime).unix(),
         price: formData.price,
-        rebates: formData.rebates ? formData.rebates * 10 : undefined,
+        rebates: formData.rebates ? formData.rebates * 10 : 0,
         meta: res,
         receiver: address || '',
         personLimit: 100,
-      };
-
-      console.log(data);
-      const a = await run(data);
-      console.log(a);
-    } catch (error) {}
-  }, [run, form, address]);
+      });
+      if (data) {
+        router.push(router.asPath.replace('create', `detail?address=${data.to}`));
+      }
+    } catch (error) {
+    } finally {
+      setloading(false);
+    }
+  }, [run, form, address, router]);
 
   return (
     <div className='create-event-form'>
@@ -70,6 +75,7 @@ export default function CreateEvent() {
         <Col>
           <Button
             onClick={submit}
+            loading={loading}
             style={{ marginRight: 16 }}
             type='primary'
             icon={<SaveOutlined />}
