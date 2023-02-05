@@ -2,6 +2,8 @@ lockfileVersion: 5.4
 
 specifiers:
   '@ant-design/icons': ^5.0.1
+  '@ethersproject/abi': 5.7.0
+  '@ethersproject/providers': 5.7.2
   '@rainbow-me/rainbowkit': ^0.8.1
   '@rainbow-me/rainbowkit-siwe-next-auth': ^0.1.5
   '@types/lodash': ^4.14.191
@@ -40,6 +42,8 @@ specifiers:
 
 dependencies:
   '@ant-design/icons': 5.0.1_biqbaboplfbrettd7655fr4n2y
+  '@ethersproject/abi': 5.7.0
+  '@ethersproject/providers': 5.7.2
   '@rainbow-me/rainbowkit': 0.8.1_amd2vhu6wj5bwjc7z6fg5hhc6m
   '@rainbow-me/rainbowkit-siwe-next-auth': 0.1.5_sa4gl3fimjircd337wcphpfjuq
   '@wagmi/core': 0.9.3_fz5ualg3bc2nr2e6kzfsjxcmya

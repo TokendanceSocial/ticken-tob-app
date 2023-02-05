@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@ethersproject/abi": "5.7.0",
+    "@ethersproject/providers": "5.7.2",
     "@rainbow-me/rainbowkit": "^0.8.1",
     "@rainbow-me/rainbowkit-siwe-next-auth": "^0.1.5",
     "@wagmi/core": "^0.9.3",
