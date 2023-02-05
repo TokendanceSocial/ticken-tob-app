@@ -138,8 +138,8 @@ export default function EventsTable(tableProps: {
         },
       ];
 
-      return btns.map((btn, index) => (
-        <Tooltip key={index} title={btn.title}>
+      return btns.map((btn) => (
+        <Tooltip key={btn.title.toString()} title={btn.title}>
           <Button
             style={{ marginRight: 8 }}
             danger={btn.danger}
@@ -165,7 +165,7 @@ export default function EventsTable(tableProps: {
   return (
     <div key='2'>
       <Table
-        rowKey={(record) => record.contactAddress}
+        rowKey={(record) => record.name + record.contractAddress}
         className='ticken-table'
         columns={columns}
         {...tableProps}
