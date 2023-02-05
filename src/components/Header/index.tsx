@@ -1,8 +1,9 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Layout } from 'antd';
 import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
+import CustomConnectButton from '../ConnectButton/index';
+import Siwe from './Siwe';
 import logo from '@/assets/images/logo.png';
 
 const { Header } = Layout;
@@ -17,7 +18,7 @@ export default function TickenHeader() {
         <div className='logo-text'>{t('title')}</div>
       </div>
       <div className='account-info'>
-        <ConnectButton />
+        <Siwe />
       </div>
     </div>
   );

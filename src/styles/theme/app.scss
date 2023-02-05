@@ -459,3 +459,52 @@ body {
     height: 100% !important;
   }
 }
+
+.connect-btn {
+  color: var(--rk-colors-accentColorForeground);
+  box-shadow: var(--rk-shadows-connectButton);
+  background: var(--rk-colors-accentColor);
+  padding-inline: 14px;
+  height: 40px;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: var(--rk-fonts-body);
+  border-radius: var(--rk-radii-connectButton);
+  cursor: pointer;
+  text-align: left;
+  border-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    transform: scale(1.025);
+    background: var(--rk-colors-connectButtonBackground);
+  }
+  > span {
+    margin-inline: 4px;
+  }
+  &.account-btn {
+    padding-right: 2px;
+  }
+  &.error {
+    background: var(--rk-colors-connectButtonBackgroundError);
+  }
+  .name {
+    border-color: var(--rk-colors-connectButtonBackground);
+    background: var(--rk-colors-connectButtonInnerBackground);
+    padding-top: 4px;
+    padding-inline: 8px;
+    padding-bottom: 4px;
+    border-width: 2px;
+    border-radius: var(--rk-radii-connectButton);
+    border-style: solid;
+    display: flex;
+    font-size: 16px;
+    margin-left: 8px;
+    .avatar {
+      height: 24px;
+      width: 24px;
+      margin-right: 8px;
+    }
+  }
+}
