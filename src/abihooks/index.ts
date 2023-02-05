@@ -124,7 +124,12 @@ function useAbi<T extends any, U>(_run: (provide: Provider, singer: any, account
   const run = useCallback(async (req?: U) => {
     setLoading(true);
     try {
-      const data = await _run(provide, singer.data, account, req);
+      let data = await _run(provide, singer.data, account, req);
+      // @ts-ignore
+      if (data.wait) {
+        // @ts-ignore
+        data = await data.wait();
+      }
       setData(data);
       setLoading(false);
       return data;

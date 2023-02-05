@@ -1,1 +1,1 @@
-export const BACK_DELAY = 2 * 1000
+export const BACK_DELAY = 3 * 1000

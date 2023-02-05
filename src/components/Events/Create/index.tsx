@@ -1,6 +1,5 @@
 import { LeftOutlined, SaveOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Row, message } from 'antd';
-import moment from 'moment';
 import { useRouter } from 'next/router';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -39,7 +38,7 @@ export default function CreateEvent() {
       const res = await nftUpload(mata);
       const time = formData.holdTime.unix();
 
-      await run({
+      const data = await run({
         name: formData.name,
         symbol: formData.symbol,
         eventType: formData.eventType,
@@ -50,12 +49,14 @@ export default function CreateEvent() {
         receiver: address || '',
         personLimit: 100,
       });
-      router.push(router.asPath.replace('create', ``));
+      message.loading(t('transactionSuccess'));
+      // @ts-ignore
+      router.push(router.asPath.replace('create', `detail?address=${data.events[0].address}`));
     } catch (error) {
     } finally {
       setloading(false);
     }
-  }, [run, form, address, router]);
+  }, [form, run, address, t, router]);
 
   return (
     <div className='create-event-form'>

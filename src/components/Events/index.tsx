@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { useAntdTable } from 'ahooks';
-import { Button, Col, Form, Row } from 'antd';
+import { Button, Col, Form, Row, message } from 'antd';
 import chunk from 'lodash/chunk';
 import type { Moment } from 'moment';
 import { useRouter } from 'next/router';
@@ -28,7 +28,7 @@ export default function Events() {
         holdTime: Moment[];
       },
     ) => {
-      if (!dataSource.current) {
+      if (!dataSource.current || dataSource.current.length === 0) {
         dataSource.current = [];
         let data;
         try {
@@ -94,7 +94,15 @@ export default function Events() {
             </Button>
           </Col>
         </Row>,
-        <EventsTable key='2' reload={search.submit} {...tableProps} />,
+        <EventsTable
+          key='2'
+          reload={() => {
+            dataSource.current = undefined;
+
+            search.submit();
+          }}
+          {...tableProps}
+        />,
       ]}
     />
   );

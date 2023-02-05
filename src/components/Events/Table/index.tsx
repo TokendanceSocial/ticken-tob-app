@@ -78,7 +78,7 @@ export default function EventsTable({
   const { t } = useTranslation();
   const router = useRouter();
   const [copySuccess, setCopySuccess] = useState(false);
-  const { run: close, error: closeError } = useCloseEvent();
+  const { run: close, loading: closeLoading } = useCloseEvent();
 
   const [airdrop, setAirdrop] = useState({
     open: false,
@@ -132,11 +132,7 @@ export default function EventsTable({
           onClick: async () => {
             try {
               await close(record.contractAddress);
-              message.success(
-                t('closeSuccessContent', {
-                  name: record.name,
-                }),
-              );
+              message.loading(t('transactionSuccess'));
               reload();
             } catch (error) {}
           },
@@ -150,12 +146,13 @@ export default function EventsTable({
             danger={btn.danger}
             onClick={btn.onClick}
             icon={btn.icon}
+            disabled={closeLoading}
             type='primary'
           />
         </Tooltip>
       ));
     },
-    [close, copySuccess, router, t, reload],
+    [t, copySuccess, router, close, reload, closeLoading],
   );
 
   const columns = useMemo(() => {

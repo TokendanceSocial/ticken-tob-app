@@ -8,7 +8,6 @@ import { useAccount, useBalance, useNetwork } from 'wagmi';
 import WriteOff from '../WriteOff';
 import { useCloseEvent, useFetchEventDetail } from '@/abihooks';
 import AirDrop from '@/components/AirDrop';
-import { BACK_DELAY } from '@/constanst';
 import { EventType, typeText } from '@/constanst/events';
 import { getBase64, getMeta, renderNftImg } from '@/utils/nftUpload';
 
@@ -109,14 +108,8 @@ export default function EventDetail() {
             onClick={async () => {
               try {
                 await close(address);
-                message.success(
-                  t('closeSuccessContent', {
-                    name: basic?.name,
-                  }),
-                );
-                setTimeout(() => {
-                  router.push(router.asPath.replace(/\/detail.*/, ''));
-                }, BACK_DELAY);
+                message.loading(t('transactionSuccess'));
+                router.push(router.asPath.replace(/\/detail.*/, ''));
               } catch (error) {}
             }}
             type='primary'
