@@ -9,10 +9,12 @@ function Siwe() {
   const { chain } = useNetwork();
   const { address, isConnected } = useAccount();
 
-  const { data: session, status } = useSession();
+  const { data: session, status: authStatus } = useSession();
 
+  const [status, setstatus] = useState<string>(authStatus);
   const handleLogin = async () => {
     try {
+      setstatus('loading');
       const callbackUrl = '/protected';
       const message = new SiweMessage({
         domain: window.location.host,
@@ -50,6 +52,10 @@ function Siwe() {
       });
     }
   }, [isConnected]);
+
+  useEffect(() => {
+    setstatus(authStatus);
+  }, [authStatus]);
 
   return <CustomConnectButton status={status} />;
 }
