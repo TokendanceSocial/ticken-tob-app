@@ -28,15 +28,42 @@ export const renderNftImg = (image: string) => {
   return image;
 };
 
+const cacheMeta = new Map();
 export async function getMeta(mataURL: string): Promise<{
   image: string;
   location: string;
   description: string;
 }> {
-  const data = await axios
-    .request({
-      method: 'get',
-      url: mataURL,
-    });
-  return data.data;
+  if (!cacheMeta.has(mataURL)) {
+    const data = await axios
+      .request({
+        method: 'get',
+        url: mataURL,
+      });
+    const meta = data.data;
+    cacheMeta.set(mataURL, meta);
+  }
+
+  return cacheMeta.get(mataURL);
+}
+
+const imageCache = new Map();
+export const getBase64 = async (fileUrl: string) => {
+  if (imageCache.has(fileUrl)) {
+    return imageCache.get(fileUrl);
+  }
+  const data = await axios.request({
+    method: 'get',
+    responseType: 'blob',
+    url: fileUrl
+  });
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(data.data);
+    reader.onload = () => {
+      imageCache.set(fileUrl, reader.result);
+      resolve(reader.result as string)
+    };
+    reader.onerror = (error) => reject(error);
+  });
 }

@@ -56,7 +56,7 @@ export default function EventBasicForm({ form }: { form: FormInstance }) {
         label={t('time')}
         name='holdTime'
       >
-        <DatePicker style={{ width: '100% ' }} />
+        <DatePicker showTime style={{ width: '100% ' }} />
       </Form.Item>
     );
   }, [t]);

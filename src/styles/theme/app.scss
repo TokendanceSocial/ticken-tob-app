@@ -27,6 +27,87 @@ body {
   width: 100vw;
   height: 100vh;
 }
+#__next,
+body {
+  .ant-table-wrapper.ticken-table {
+    .ant-table {
+      background: transparent;
+      color: rgba(244, 244, 245, 0.9);
+      .ant-table-thead > tr > th {
+        background: transparent;
+        border-bottom-color: transparent;
+        color: rgba(244, 244, 245, 0.6);
+      }
+      .ant-table-tbody > tr.ant-table-row:hover > td {
+        background: transparent;
+      }
+      .ant-table-tbody > tr > td {
+        border-bottom-color: transparent;
+        border-top-color: transparent;
+      }
+      .ant-table-tbody > tr {
+        &:nth-child(odd) {
+          background: rgba(0, 0, 0, 0.24);
+          border-radius: 8px;
+        }
+      }
+      .ant-table-tbody > tr.ant-table-placeholder:hover > td {
+        background-color: transparent;
+      }
+      .ant-table-cell-row-hover {
+        background-color: transparent;
+      }
+    }
+  }
+  .ant-pagination {
+    .ant-pagination-item {
+      color: rgba(244, 244, 245, 0.9);
+      > a {
+        color: rgba(244, 244, 245, 0.9);
+      }
+    }
+    .ant-pagination-item-active {
+      color: #f4f4f5;
+      background-color: #30314e;
+      border-color: #5155c9;
+    }
+    .ant-pagination-item-container .ant-pagination-item-ellipsis {
+      color: rgba(244, 244, 245, 0.9);
+    }
+
+    .ant-pagination-item-link {
+      color: rgba(244, 244, 245, 0.9);
+    }
+    .ant-pagination-disabled .ant-pagination-item-link {
+      color: rgba(244, 244, 245, 0.6);
+    }
+    .ant-pagination-item-active {
+      background-color: transparent;
+    }
+    .ant-select-focused,
+    .ant-select-open,
+    .ant-pagination-options {
+      .ant-select-selector {
+        color: #f4f4f5;
+        background-color: #30314e;
+        border-color: #30314e;
+      }
+      .ant-select-arrow {
+        color: #f4f4f5;
+      }
+      .ant-select-selection-item {
+        color: #f4f4f5;
+      }
+    }
+    .ant-select {
+      &:hover {
+        .ant-select-selector {
+          border-color: #30314e !important;
+        }
+      }
+    }
+  }
+}
 .g-glossy {
   position: fixed;
   margin: auto;
@@ -175,84 +256,7 @@ body {
     margin: 12px 0 12px;
     font-size: 2.5rem;
   }
-  .ant-table-wrapper.ticken-table {
-    .ant-table {
-      background: transparent;
-      color: rgba(244, 244, 245, 0.9);
-      .ant-table-thead > tr > th {
-        background: transparent;
-        border-bottom-color: transparent;
-        color: rgba(244, 244, 245, 0.6);
-      }
-      .ant-table-tbody > tr.ant-table-row:hover > td {
-        background: transparent;
-      }
-      .ant-table-tbody > tr > td {
-        border-bottom-color: transparent;
-        border-top-color: transparent;
-      }
-      .ant-table-tbody > tr {
-        &:nth-child(odd) {
-          background: rgba(0, 0, 0, 0.24);
-          border-radius: 8px;
-        }
-      }
-      .ant-table-tbody > tr.ant-table-placeholder:hover > td {
-        background-color: transparent;
-      }
-      .ant-table-cell-row-hover {
-        background-color: transparent;
-      }
-    }
-  }
-  .ant-pagination {
-    .ant-pagination-item {
-      color: rgba(244, 244, 245, 0.9);
-      > a {
-        color: rgba(244, 244, 245, 0.9);
-      }
-    }
-    .ant-pagination-item-active {
-      color: #f4f4f5;
-      background-color: #30314e;
-      border-color: #5155c9;
-    }
-    .ant-pagination-item-container .ant-pagination-item-ellipsis {
-      color: rgba(244, 244, 245, 0.9);
-    }
 
-    .ant-pagination-item-link {
-      color: rgba(244, 244, 245, 0.9);
-    }
-    .ant-pagination-disabled .ant-pagination-item-link {
-      color: rgba(244, 244, 245, 0.6);
-    }
-    .ant-pagination-item-active {
-      background-color: transparent;
-    }
-    .ant-select-focused,
-    .ant-select-open,
-    .ant-pagination-options {
-      .ant-select-selector {
-        color: #f4f4f5;
-        background-color: #30314e;
-        border-color: #30314e;
-      }
-      .ant-select-arrow {
-        color: #f4f4f5;
-      }
-      .ant-select-selection-item {
-        color: #f4f4f5;
-      }
-    }
-    .ant-select {
-      &:hover {
-        .ant-select-selector {
-          border-color: #30314e !important;
-        }
-      }
-    }
-  }
   > div {
     padding: 24px;
     &:first-child {
@@ -437,7 +441,9 @@ body {
     color: #c1c3cf;
   }
   .ant-descriptions-item-content {
-    border-left: 4px solid #9fa2ac;
+    background: rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 2px -5px rgb(0 0 0 / 45%), 0px 2px 5px rgb(0 0 0 / 45%);
+    border-radius: 10px;
     padding: 4px 8px;
   }
   .ant-card {

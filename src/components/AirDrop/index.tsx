@@ -2,11 +2,11 @@ import { FileOutlined, PlusOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import { Button, Form, Modal, Table, message } from 'antd';
 import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AddAirdropForm from './Add';
 import AirDropDetail from './Detail';
-import { addAirdrop, fetchAirDropList } from '@/utils/event';
+import { useAddAirdrop, useFetchAirDropList } from '@/abihooks';
 
 export default function AirDrop({
   name,
@@ -22,9 +22,7 @@ export default function AirDrop({
 }) {
   const { t } = useTranslation();
 
-  const { run, data } = useRequest(fetchAirDropList, {
-    manual: true,
-  });
+  const { run: fetch, data, loading } = useFetchAirDropList();
 
   const [detailInfo, setDetailInfo] = useState({
     open: false,
@@ -33,52 +31,63 @@ export default function AirDrop({
 
   const [modal, contextHolder] = Modal.useModal();
 
+  const handleFetch = useCallback(async () => {
+    try {
+      await fetch(address);
+    } catch (error) {}
+  }, [address, fetch]);
+
   useEffect(() => {
     if (open) {
-      run(address);
+      handleFetch();
+    } else {
+      form.resetFields();
     }
-  }, [address, open, run]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   const columns = useMemo(() => {
     return [
-      {
-        dataIndex: 'time',
-        title: t('operationTime'),
-        render(time: number) {
-          return moment.unix(time).format('LL');
-        },
-      },
+      // {
+      //   dataIndex: 'time',
+      //   title: t('operationTime'),
+      //   render(time: number) {
+      //     return moment.unix(time).format('LL');
+      //   },
+      // },
       {
         dataIndex: 'address',
-        title: t('operationAddress'),
+        // title: t('operationAddress'),
       },
-      {
-        dataIndex: 'amount',
-        title: t('amount'),
-      },
-      {
-        dataIndex: 'status',
-        title: t('status'),
-      },
-      {
-        dataIndex: 'detail',
-        title: t('detail'),
-        render(_: string, record: any) {
-          return (
-            <Button
-              onClick={() =>
-                setDetailInfo({
-                  open: true,
-                  id: record.id,
-                })
-              }
-              icon={<FileOutlined />}
-            />
-          );
-        },
-      },
+      // {
+      //   dataIndex: 'amount',
+      //   title: t('amount'),
+      // },
+      // {
+      //   dataIndex: 'status',
+      //   title: t('status'),
+      // },
+      // {
+      //   dataIndex: 'detail',
+      //   title: t('detail'),
+      //   render(_: string, record: any) {
+      //     return (
+      //       <Button
+      //         onClick={() =>
+      //           setDetailInfo({
+      //             open: true,
+      //             id: record.id,
+      //           })
+      //         }
+      //         icon={<FileOutlined />}
+      //       />
+      //     );
+      //   },
+      // },
     ];
-  }, [t]);
+  }, []);
+
+  const { run: add, loading: addLoading } = useAddAirdrop();
 
   const [form] = Form.useForm();
   return (
@@ -95,15 +104,21 @@ export default function AirDrop({
           onClick={() =>
             modal.confirm({
               width: 600,
-
               title: t('addAirdrop'),
               content: <AddAirdropForm form={form} />,
-              onOk: async () => {
+              afterClose: async () => {
                 try {
-                  await addAirdrop(address, form.getFieldValue('list'));
+                  await handleFetch();
                 } catch (error) {}
-                run(address);
-                message.success(t('addSuccess'));
+              },
+              onOk: async () => {
+                await add({
+                  eventAddress: address,
+                  address: form.getFieldValue('address'),
+                });
+                await handleFetch();
+                message.success(t('addAirdropSuccess'));
+                return Promise.resolve();
               },
             })
           }
@@ -113,7 +128,18 @@ export default function AirDrop({
         </Button>
       }
     >
-      <Table columns={columns} dataSource={data} />
+      <Table
+        rowKey={(record) => record.address}
+        loading={loading}
+        columns={columns}
+        pagination={false}
+        className='ticken-table '
+        dataSource={data?.map((item) => {
+          return {
+            address: item,
+          };
+        })}
+      />
       {contextHolder}
       <AirDropDetail
         onCancel={() => setDetailInfo({ open: false, id: '' })}

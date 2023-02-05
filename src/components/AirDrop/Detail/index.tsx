@@ -9,7 +9,7 @@ const columns = [
     dataIndex: 'transactionHash',
     title: 'transactionHash',
     render(time: number) {
-      return moment.unix(time).format('LL');
+      return moment.unix(time).format('LLL');
     },
   },
   {

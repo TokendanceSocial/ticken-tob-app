@@ -30,7 +30,6 @@ export function useFetchWriteOffList() {
   // 获取核销列表
   return useAbi<string[], string>((provide, singer, account, _?: any) => {
     const connect = Event__factory.connect(_, provide);
-    console.log(111111, _);
     return connect.signerUsers();
   });
 }

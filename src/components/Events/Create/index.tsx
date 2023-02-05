@@ -14,7 +14,7 @@ export default function CreateEvent() {
   const router = useRouter();
   const [form] = Form.useForm();
   const [loading, setloading] = useState(false);
-  const { run, error } = useCreateEvent();
+  const { run } = useCreateEvent();
 
   const { address } = useAccount();
   useEffect(() => {
@@ -49,9 +49,7 @@ export default function CreateEvent() {
         receiver: address || '',
         personLimit: 100,
       });
-      if (data) {
-        router.push(router.asPath.replace('create', `detail?address=${data.to}`));
-      }
+      router.push(router.asPath.replace('create', ``));
     } catch (error) {
     } finally {
       setloading(false);

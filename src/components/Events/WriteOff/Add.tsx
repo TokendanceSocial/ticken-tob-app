@@ -1,10 +1,10 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import type { FormInstance } from 'antd';
-import { useTranslation } from 'next-i18next';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-export default function AddAirdropForm({ form }: { form: FormInstance }) {
+export default function AddWriteOff({ form }: { form: FormInstance }) {
   const { t } = useTranslation();
   return (
     <Form form={form}>
@@ -12,7 +12,7 @@ export default function AddAirdropForm({ form }: { form: FormInstance }) {
         {(fields, { add, remove }, { errors }) => (
           <>
             {fields.map((field, index) => (
-              <Form.Item label={t('address')} required={true} key={field.key}>
+              <Form.Item required={true} key={field.key}>
                 <Form.Item
                   {...field}
                   validateTrigger={['onChange', 'onBlur']}

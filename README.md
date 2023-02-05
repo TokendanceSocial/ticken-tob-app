@@ -38,7 +38,6 @@ import { useTranslation } from 'next-i18next';
 export default function Header() {
   const { t } = useTranslation();
 
-  console.log(t('title'));
   return (
     <div>
       <ConnectButton />
