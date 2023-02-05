@@ -131,8 +131,13 @@ export default function EventsTable({
           danger: true,
           onClick: async () => {
             try {
+              message.loading({
+                key: 'loading',
+                content: t('loading'),
+                duration: 0,
+              });
               await close(record.contractAddress);
-              message.loading(t('transactionSuccess'));
+              message.destroy();
               reload();
             } catch (error) {}
           },

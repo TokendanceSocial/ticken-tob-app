@@ -107,8 +107,9 @@ export default function EventDetail() {
           <Button
             onClick={async () => {
               try {
+                message.loading(t('loading'), 0);
                 await close(address);
-                message.loading(t('transactionSuccess'));
+                message.destroy();
                 router.push(router.asPath.replace(/\/detail.*/, ''));
               } catch (error) {}
             }}

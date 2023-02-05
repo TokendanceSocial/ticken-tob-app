@@ -35,9 +35,9 @@ export default function CreateEvent() {
     };
 
     try {
+      message.loading(t('loading'), 0);
       const res = await nftUpload(mata);
       const time = formData.holdTime.unix();
-
       const data = await run({
         name: formData.name,
         symbol: formData.symbol,
@@ -49,9 +49,10 @@ export default function CreateEvent() {
         receiver: address || '',
         personLimit: 100,
       });
-      message.loading(t('transactionSuccess'));
+      message.destroy();
       // @ts-ignore
-      router.push(router.asPath.replace('create', `detail?address=${data.events[0].address}`));
+      const event = data.events.find((event) => event.event === 'proxy_deployed');
+      router.push(router.asPath.replace('create', `detail?address=${event.args[0]}`));
     } catch (error) {
     } finally {
       setloading(false);

@@ -39,5 +39,5 @@
   "addWriteOff": "Add Write-Off",
   "cover": "Cover",
   "reloadListMessage": "Please wait while the data is being refreshed.",
-  "transactionSuccess": "Transaction successful. Please wait while the data is being refreshed."
+  "transactionSuccess": "Transaction proceeding, wait a moment pls."
 }

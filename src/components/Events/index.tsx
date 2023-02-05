@@ -98,7 +98,6 @@ export default function Events() {
           key='2'
           reload={() => {
             dataSource.current = undefined;
-
             search.submit();
           }}
           {...tableProps}

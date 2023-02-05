@@ -1,9 +1,9 @@
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
+
 import { Provider } from '@ethersproject/providers';
-import { message } from 'antd';
+import { Modal, message } from 'antd';
 import { ContractTransaction } from 'ethers/lib/ethers';
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useProvider, useAccount, useSigner } from 'wagmi';
 import { CONTRACT_ADDRESS } from '@/constanst/token';
 import { EventInfo } from '@/typechain-types/contracts/Admin';
@@ -121,20 +121,28 @@ function useAbi<T extends any, U>(_run: (provide: Provider, singer: any, account
   const provide = useProvider();
   const account = useAccount();
   const singer = useSigner();
+  const { t } = useTranslation();
   const run = useCallback(async (req?: U) => {
     setLoading(true);
     try {
       let data = await _run(provide, singer.data, account, req);
       // @ts-ignore
       if (data.wait) {
+        message.loading({
+          content: t('transactionSuccess'),
+          duration: 0,
+          key: 'loading'
+        });
         // @ts-ignore
         data = await data.wait();
+        message.destroy('loading')
       }
       setData(data);
       setLoading(false);
       return data;
     } catch (error: any) {
       setLoading(false);
+      message.destroy();
       message.error(error.toString());
       setError(error);
       return Promise.reject(error)

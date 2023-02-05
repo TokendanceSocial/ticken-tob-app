@@ -22,6 +22,26 @@ body {
   background-attachment: fixed;
   background-size: cover;
   background-position: top;
+  input:-internal-autofill-selected {
+    background-color: #141414 !important;
+  }
+
+  input {
+    background-color: #141414 !important;
+  }
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    -webkit-text-fill-color: #fff;
+    -webkit-box-shadow: 0 0 0px 1000px #000 inset;
+    transition: background-color 5000s ease-in-out 0s;
+  }
 }
 #__next {
   width: 100vw;
@@ -153,6 +173,9 @@ body {
   background: transparent;
 }
 
+.ant-menu-title-content {
+  font-family: 'Poppins' !important;
+}
 .ticken-header {
   margin: 0 0 24px;
   font-size: 18px;
@@ -171,6 +194,8 @@ body {
     white-space: nowrap;
     display: flex;
     align-items: center;
+    font-weight: 700;
+    font-family: 'Poppins';
     .logo-text {
       font-size: 32px;
       width: 120px;
@@ -255,6 +280,7 @@ body {
     line-height: 1;
     margin: 12px 0 12px;
     font-size: 2.5rem;
+    font-family: 'Poppins';
   }
 
   > div {
@@ -415,6 +441,7 @@ body {
     line-height: 1;
     margin: 12px 0 12px;
     font-size: 2.5rem;
+    font-family: 'Poppins';
   }
   .ant-card-body {
     overflow-x: auto;
@@ -431,6 +458,7 @@ body {
     line-height: 1;
     margin: 12px 0 12px;
     font-size: 2.5rem;
+    font-family: 'Poppins';
   }
   .ant-spin-blur {
     opacity: 0;
