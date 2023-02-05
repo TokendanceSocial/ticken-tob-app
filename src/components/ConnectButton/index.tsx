@@ -21,7 +21,7 @@ export default function CustomConnectButton() {
         const ready = mounted && authenticationStatus !== 'loading';
 
         const connected = ready && account && chain;
-        const authenticated = !authenticationStatus || authenticationStatus === 'authenticated';
+        const authenticated = authenticationStatus === 'authenticated';
 
         if (chain?.unsupported) {
           openChainModal();
