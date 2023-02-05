@@ -37,6 +37,8 @@ export default function CustomConnectButton({ status }: { status: string }) {
             })}
           >
             {(() => {
+              console.log(status);
+              if (!ready) return null;
               if (!connected || !authenticated) {
                 return (
                   <button
