@@ -163,10 +163,9 @@ export default function EventsTable(tableProps: {
   }, [actionRender, t]);
 
   return (
-    <>
+    <div key='2'>
       <Table
         rowKey={(record) => record.contactAddress}
-        key='2'
         className='ticken-table'
         columns={columns}
         {...tableProps}
@@ -183,6 +182,6 @@ export default function EventsTable(tableProps: {
         address={airdrop.address}
         name={airdrop.name}
       />
-    </>
+    </div>
   );
 }

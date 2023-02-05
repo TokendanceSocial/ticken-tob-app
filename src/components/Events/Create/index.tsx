@@ -37,12 +37,13 @@ export default function CreateEvent() {
 
     try {
       const res = await nftUpload(mata);
+      const time = formData.holdTime.unix();
 
-      const data = await run({
+      await run({
         name: formData.name,
         symbol: formData.symbol,
         eventType: formData.eventType,
-        holdTime: moment(formData.holdTime).unix(),
+        holdTime: time,
         price: formData.price,
         rebates: formData.rebates ? formData.rebates * 10 : 0,
         meta: res,
