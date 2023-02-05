@@ -1,17 +1,14 @@
 import { getCsrfToken, signIn, useSession, signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { SiweMessage } from 'siwe';
-import { useAccount, useConnect, useNetwork, useSignMessage } from 'wagmi';
-import { InjectedConnector } from 'wagmi/connectors/injected';
+import { useAccount, useNetwork, useSignMessage } from 'wagmi';
 import CustomConnectButton from '../ConnectButton';
 
 function Siwe() {
   const { signMessageAsync } = useSignMessage();
   const { chain } = useNetwork();
   const { address, isConnected } = useAccount();
-  const { connect } = useConnect({
-    connector: new InjectedConnector(),
-  });
+
   const { data: session, status } = useSession();
 
   const handleLogin = async () => {
@@ -54,7 +51,7 @@ function Siwe() {
     }
   }, [isConnected]);
 
-  return <CustomConnectButton />;
+  return <CustomConnectButton status={status} />;
 }
 
 export default Siwe;

@@ -1,9 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useSession } from 'next-auth/react';
 import CustomAvatar from '../CustomAvatar';
 
-export default function CustomConnectButton() {
-  const session = useSession();
+export default function CustomConnectButton({ status }: { status: string }) {
   return (
     <ConnectButton.Custom>
       {({
@@ -15,13 +13,12 @@ export default function CustomConnectButton() {
         openConnectModal,
         mounted,
       }) => {
-        const authenticationStatus = session.status;
         // Note: If your app doesn't use authentication, you
         // can remove all 'authenticationStatus' checks
-        const ready = mounted && authenticationStatus !== 'loading';
+        const ready = mounted && status !== 'loading';
 
         const connected = ready && account && chain;
-        const authenticated = authenticationStatus === 'authenticated';
+        const authenticated = status === 'authenticated';
 
         if (chain?.unsupported) {
           openChainModal();
