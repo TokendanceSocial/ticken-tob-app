@@ -50,6 +50,7 @@ function Siwe() {
 
   useEffect(() => {
     if (!isConnected) {
+      setLoading(true);
       signOut({
         redirect: false,
       });
