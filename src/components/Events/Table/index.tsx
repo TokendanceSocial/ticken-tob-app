@@ -85,14 +85,14 @@ export default function EventsTable(tableProps: {
     (_: string, record: EventInfo.AllInfoStructOutput['basic']) => {
       const btns = [
         {
-          title: 'detail',
+          title: t('eventsDetail'),
           icon: <ProfileOutlined />,
           onClick: () => {
             router.push(`${router.asPath}/detail?address=${record.contractAddress}`);
           },
         },
         {
-          title: 'airdrop',
+          title: t('airdrop'),
           icon: <WifiOutlined />,
           onClick: () => {
             setAirdrop({
@@ -122,13 +122,13 @@ export default function EventsTable(tableProps: {
           icon: <ShareAltOutlined />,
         },
         {
-          title: 'close',
+          title: t('close'),
           icon: <CloseOutlined />,
           danger: true,
           onClick: async () => {
             try {
               await close(record.contractAddress);
-              message.success(t('closeSuccess'));
+              message.success(t('closeSuccessContent'));
             } catch (error) {}
           },
         },

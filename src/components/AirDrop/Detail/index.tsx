@@ -40,16 +40,8 @@ export default function AirDropDetail({
   }, [open, recordId, run]);
 
   return (
-    <Modal
-      title={t('airdropTitle', {
-        name,
-      })}
-      width={700}
-      open={open}
-      onCancel={onCancel}
-      footer={null}
-    >
-      <Descriptions title={t('airdropInfo')}>
+    <Modal title={t('airdropDetail')} width={700} open={open} onCancel={onCancel} footer={null}>
+      <Descriptions>
         <Descriptions.Item label={t('operationTime')}>{data?.operationTime}</Descriptions.Item>
         <Descriptions.Item label={t('operationAddress')}>
           {data?.operationAddress}

@@ -42,7 +42,7 @@ export default function WriteOff({ eventAddress }: { eventAddress: string }) {
       eventAddress,
     });
     await handleFetch();
-    message.success(t('writeOffSucces'));
+    message.success(t('addWriteOffSuccess'));
   }, [eventAddress, form, handleFetch, run, t]);
   const [modal, contextHolder] = Modal.useModal();
 

@@ -31,7 +31,7 @@ export default function EventBasicForm({ form }: { form: FormInstance }) {
   }, [t]);
   const eventSymbol = useMemo(() => {
     return (
-      <Form.Item label={t('eventSymbol')} name='symbol'>
+      <Form.Item label={t('symbol')} name='symbol'>
         <Input
           placeholder={
             t('pleaseEnter', {

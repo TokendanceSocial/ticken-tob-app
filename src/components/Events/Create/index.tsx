@@ -58,7 +58,7 @@ export default function CreateEvent() {
 
   return (
     <div className='create-event-form'>
-      <h1 className='create-event-form__title'>{t('createEvent')}</h1>
+      <h1 className='create-event-form__title'>{t('newEvents')}</h1>
       <Row justify='space-between'>
         <Col>
           <Button

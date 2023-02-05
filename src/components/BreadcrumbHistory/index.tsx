@@ -6,13 +6,13 @@ import React, { useCallback } from 'react';
 
 function getBreadcrumbName(path: string) {
   if (path.includes('events/create')) {
-    return 'createEvent';
+    return 'newEvents';
   }
   if (path.includes('events/detail')) {
-    return 'eventDetail';
+    return 'eventsDetail';
   }
   if (path.includes('events')) {
-    return 'eventList';
+    return 'eventsList';
   }
   return '';
 }

@@ -86,7 +86,7 @@ export default function EventDetail() {
 
   return (
     <div className='event-detail'>
-      <h1 className='event-detail__title'>{t('eventDetail')}</h1>
+      <h1 className='event-detail__title'>{t('eventsDetail')}</h1>
       <Row justify='space-between'>
         <Col>
           <Button
@@ -134,7 +134,7 @@ export default function EventDetail() {
               <Descriptions column={1} layout='vertical'>
                 <Descriptions.Item label={t('name')}>{basic?.name}</Descriptions.Item>
                 <Descriptions.Item label={t('symbol')}>{basic?.symbol}</Descriptions.Item>
-                <Descriptions.Item label={t('holdTime')}>
+                <Descriptions.Item label={t('time')}>
                   {moment.unix(Number(basic?.holdTime)).format('LLL')}
                 </Descriptions.Item>
                 <Descriptions.Item label={t('location')}>{meta?.location}</Descriptions.Item>
