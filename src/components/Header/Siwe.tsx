@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { getCsrfToken, signIn, useSession, signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { SiweMessage } from 'siwe';
@@ -11,10 +12,10 @@ function Siwe() {
 
   const { data: session, status: authStatus } = useSession();
 
-  const [status, setstatus] = useState<string>(authStatus);
+  const [loading, setLoading] = useState<boolean>(false);
   const handleLogin = async () => {
     try {
-      setstatus('loading');
+      setLoading(true);
       const callbackUrl = '/protected';
       const message = new SiweMessage({
         domain: window.location.host,
@@ -34,8 +35,10 @@ function Siwe() {
         signature,
         callbackUrl,
       });
-    } catch (error) {
-      window.alert(error);
+    } catch (error: any) {
+      message.error(error.toString());
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,11 +56,7 @@ function Siwe() {
     }
   }, [isConnected]);
 
-  useEffect(() => {
-    setstatus(authStatus);
-  }, [authStatus]);
-
-  return <CustomConnectButton status={status} />;
+  return <CustomConnectButton status={loading ? 'loading' : authStatus} />;
 }
 
 export default Siwe;
