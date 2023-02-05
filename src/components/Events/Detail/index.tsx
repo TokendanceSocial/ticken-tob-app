@@ -109,7 +109,11 @@ export default function EventDetail() {
             onClick={async () => {
               try {
                 await close(address);
-                message.success(t('closeSuccessContent'));
+                message.success(
+                  t('closeSuccessContent', {
+                    name: basic?.name,
+                  }),
+                );
                 setTimeout(() => {
                   router.push(router.asPath.replace(/\/detail.*/, ''));
                 }, BACK_DELAY);

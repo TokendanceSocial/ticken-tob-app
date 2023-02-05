@@ -128,7 +128,11 @@ export default function EventsTable(tableProps: {
           onClick: async () => {
             try {
               await close(record.contractAddress);
-              message.success(t('closeSuccessContent'));
+              message.success(
+                t('closeSuccessContent', {
+                  name: record.name,
+                }),
+              );
             } catch (error) {}
           },
         },
