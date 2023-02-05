@@ -94,7 +94,7 @@ export default function Events() {
             </Button>
           </Col>
         </Row>,
-        <EventsTable key='2' {...tableProps} />,
+        <EventsTable key='2' reload={search.submit} {...tableProps} />,
       ]}
     />
   );

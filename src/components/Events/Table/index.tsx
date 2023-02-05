@@ -64,12 +64,16 @@ const getColumns = (actionRender: (...args: any) => JSX.Element[]) => [
     render: actionRender,
   },
 ];
-export default function EventsTable(tableProps: {
+export default function EventsTable({
+  reload,
+  ...tableProps
+}: {
   [key: string]: any;
   dataSource: any;
   loading: boolean;
   onChange: (pagination: any, filters?: any, sorter?: any) => void;
   pagination: any;
+  reload: () => void;
 }) {
   const { t } = useTranslation();
   const router = useRouter();
@@ -133,6 +137,7 @@ export default function EventsTable(tableProps: {
                   name: record.name,
                 }),
               );
+              reload();
             } catch (error) {}
           },
         },
@@ -150,7 +155,7 @@ export default function EventsTable(tableProps: {
         </Tooltip>
       ));
     },
-    [close, copySuccess, router, t],
+    [close, copySuccess, router, t, reload],
   );
 
   const columns = useMemo(() => {
