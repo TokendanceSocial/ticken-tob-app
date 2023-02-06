@@ -50,6 +50,7 @@ export default function EventTypeForm({ form }: { form: FormInstance }) {
         shouldUpdate={(prev, cur) => {
           return prev.eventType !== cur.eventType;
         }}
+        noStyle
       >
         {() => {
           if (form.getFieldValue('eventType') === EventType.PublicSale) return null;
