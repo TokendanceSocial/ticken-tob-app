@@ -29,7 +29,6 @@ body {
   input {
     background-color: #141414 !important;
   }
-  .ant-input-affix-wrapper > input.ant-input:focus,
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
@@ -44,6 +43,9 @@ body {
     box-shadow: 0 0 0px 1000px #000 inset !important;
     -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
     transition: background-color 5000s ease-in-out 0s;
+  }
+  .ant-input-affix-wrapper > input.ant-input:focus {
+    box-shadow: 0 0 0px 1000px #000 inset !important;
   }
 }
 #__next {
