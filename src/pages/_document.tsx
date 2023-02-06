@@ -15,6 +15,7 @@ export default function Document() {
             }}
           />
         )}
+        <link rel='shortcut icon' href='/logo.png' />
         <title>Ticken</title>
       </Head>
 
