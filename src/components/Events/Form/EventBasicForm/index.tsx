@@ -35,7 +35,7 @@ export default function EventBasicForm({ form }: { form: FormInstance }) {
         <Input
           placeholder={
             t('pleaseEnter', {
-              name: t('eventSymbol'),
+              name: t('symbol'),
             }) || ''
           }
           showCount

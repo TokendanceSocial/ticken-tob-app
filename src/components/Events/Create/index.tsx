@@ -47,7 +47,7 @@ export default function CreateEvent() {
         rebates: formData.rebates ? formData.rebates * 10 : 0,
         meta: res,
         receiver: address || '',
-        personLimit: 100,
+        personLimit: 0,
       });
       message.destroy();
       // @ts-ignore
