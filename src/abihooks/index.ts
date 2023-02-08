@@ -1,6 +1,6 @@
-
 import { Provider } from '@ethersproject/providers';
 import { Modal, message } from 'antd';
+import { ethers } from 'ethers';
 import { ContractTransaction } from 'ethers/lib/ethers';
 import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -52,14 +52,15 @@ export interface fetchEventDetailReq {
   address: string;
 }
 export function useFetchEventDetail() {
-  return useAbi<EventInfo.AllInfoStructOutput, fetchEventDetailReq>((provide, singer, account, _?: any) => {
-    const connect = Event__factory.connect(_.eventAddress, provide);
-    return connect.allUserInfo(_.address);
-  });
+  return useAbi<EventInfo.AllInfoStructOutput, fetchEventDetailReq>(
+    (provide, singer, account, _?: any) => {
+      const connect = Event__factory.connect(_.eventAddress, provide);
+      return connect.allUserInfo(_.address);
+    },
+  );
 }
 
 export function useEventList() {
-
   return useAbi<EventInfo.AllInfoStructOutput[], any>((provide, singer, account) => {
     const connect = Admin__factory.connect(CONTRACT_ADDRESS, provide);
     return connect.eventsForOwner(account.address);
@@ -85,7 +86,7 @@ export function useCreateEvent() {
       _.symbol,
       _.holdTime,
       _.personLimit,
-      _.price,
+      ethers.utils.parseEther(_.price?.toString() || '0'),
       _.rebates,
       _.meta,
       _.receiver,
@@ -114,7 +115,9 @@ export function useAddWriteOff() {
   });
 }
 
-function useAbi<T extends any, U>(_run: (provide: Provider, singer: any, account: any, req?: U) => Promise<T>) {
+function useAbi<T extends any, U>(
+  _run: (provide: Provider, singer: any, account: any, req?: U) => Promise<T>,
+) {
   const [data, setData] = useState<T>();
   const [error, setError] = useState<unknown>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -122,35 +125,37 @@ function useAbi<T extends any, U>(_run: (provide: Provider, singer: any, account
   const account = useAccount();
   const singer = useSigner();
   const { t } = useTranslation();
-  const run = useCallback(async (req?: U) => {
-    setLoading(true);
-    try {
-      let data = await _run(provide, singer.data, account, req);
-      // @ts-ignore
-      if (data.wait) {
-        message.loading({
-          content: t('transactionSuccess'),
-          duration: 0,
-          key: 'loading'
-        });
+  const run = useCallback(
+    async (req?: U) => {
+      setLoading(true);
+      try {
+        let data = await _run(provide, singer.data, account, req);
         // @ts-ignore
-        data = await data.wait();
-        message.destroy('loading')
+        if (data.wait) {
+          message.loading({
+            content: t('transactionSuccess'),
+            duration: 0,
+            key: 'loading',
+          });
+          // @ts-ignore
+          data = await data.wait();
+          message.destroy('loading');
+        }
+        setData(data);
+        setLoading(false);
+        return data;
+      } catch (error: any) {
+        setLoading(false);
+        message.destroy();
+        message.error(error.toString());
+        setError(error);
+        return Promise.reject(error);
+      } finally {
+        setLoading(false);
       }
-      setData(data);
-      setLoading(false);
-      return data;
-    } catch (error: any) {
-      setLoading(false);
-      message.destroy();
-      message.error(error.toString());
-      setError(error);
-      return Promise.reject(error)
-    } finally {
-      setLoading(false);
-    }
-
-  }, [_run, account, provide, singer.data]);
+    },
+    [_run, account, provide, singer.data],
+  );
   return {
     data,
     run,
