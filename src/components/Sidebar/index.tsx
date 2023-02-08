@@ -16,15 +16,15 @@ export default function Sidebar() {
 
   const items = useMemo(() => {
     return [
-      {
-        key: 'dashboard',
-        icon: (
-          <Avatar>
-            <DashboardOutlined />
-          </Avatar>
-        ),
-        label: t('dashboard'),
-      },
+      // {
+      //   key: 'dashboard',
+      //   icon: (
+      //     <Avatar>
+      //       <DashboardOutlined />
+      //     </Avatar>
+      //   ),
+      //   label: t('dashboard'),
+      // },
       {
         key: 'events',
         icon: (
