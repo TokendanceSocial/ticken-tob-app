@@ -1,5 +1,6 @@
 import { CloseOutlined, LeftOutlined, WifiOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Row, Card, Descriptions, message, Skeleton, Spin } from 'antd';
+import { BigNumber, ethers } from 'ethers';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -83,6 +84,16 @@ export default function EventDetail() {
     });
   }, [data?.basic]);
 
+  const price = useMemo(
+    () =>
+      basic?.price !== undefined
+        ? basic.price.eq(0)
+          ? 0
+          : ethers.utils.formatEther(basic?.price)
+        : 0,
+    [basic],
+  );
+
   return (
     <div className='event-detail'>
       <h1 className='event-detail__title'>{t('eventsDetail')}</h1>
@@ -164,12 +175,14 @@ export default function EventDetail() {
             <Descriptions.Item label={t('eventType')}>
               {typeText[basic?.eventType || 0]}
             </Descriptions.Item>
-            <Descriptions.Item label={t('price')}>{`${basic?.price.toNumber()} ${
-              balance?.symbol
-            }`}</Descriptions.Item>
+            <Descriptions.Item
+              label={t('price')}
+            >{`${price} ${balance?.symbol}`}</Descriptions.Item>
             {basic?.eventType === EventType.InviteOnly && (
               <Descriptions.Item label={t('rebates')}>{`${
-                Number(basic?.rebates) / 10
+                !basic.rebates.eq(0)
+                  ? basic.rebates.mul(BigNumber.from(1000)).div(basic.price).toNumber() / 10
+                  : 0
               }%`}</Descriptions.Item>
             )}
           </Descriptions>
