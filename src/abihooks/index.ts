@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import { ContractTransaction } from 'ethers/lib/ethers';
 import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useProvider, useAccount, useSigner } from 'wagmi';
+import { useProvider, useAccount, useSigner, useNetwork } from 'wagmi';
 import { CONTRACT_ADDRESS } from '@/constanst/token';
 import { EventInfo } from '@/typechain-types/contracts/Admin';
 import { Admin__factory, Event__factory } from '@/typechain-types/index';
@@ -61,8 +61,10 @@ export function useFetchEventDetail() {
 }
 
 export function useEventList() {
+  const { chain } = useNetwork();
+  console.log(chain)
   return useAbi<EventInfo.AllInfoStructOutput[], any>((provide, singer, account) => {
-    const connect = Admin__factory.connect(CONTRACT_ADDRESS, provide);
+    const connect = Admin__factory.connect(CONTRACT_ADDRESS[chain?.id || 80001], provide);
     return connect.eventsForOwner(account.address);
   });
 }
@@ -78,9 +80,11 @@ export interface createEventReq {
   eventType: 0 | 1; // 如0为公售，1为仅限邀请
 }
 export function useCreateEvent() {
+  const { chain } = useNetwork();
   // 创建活动
   return useAbi<ContractTransaction, createEventReq>((provide, singer: any, account, _: any) => {
-    const connect = Admin__factory.connect(CONTRACT_ADDRESS, singer);
+
+    const connect = Admin__factory.connect(CONTRACT_ADDRESS[chain?.id || 80001], singer);
     return connect.createEvent(
       _.name,
       _.symbol,
