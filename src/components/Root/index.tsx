@@ -8,10 +8,10 @@ export default function Root() {
   const router = useRouter();
   const naviagate = useNavigate();
   useEffect(() => {
-    // if (router.pathname === '/') {
-    //   naviagate('events');
-    //   return;
-    // }
+    if (router.asPath === '/') {
+      router.push('#/events');
+      return;
+    }
     naviagate(router.asPath.split('#')[1]);
   }, [router, naviagate]);
 
