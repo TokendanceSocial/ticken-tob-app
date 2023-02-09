@@ -62,7 +62,6 @@ export function useFetchEventDetail() {
 
 export function useEventList() {
   const { chain } = useNetwork();
-  console.log(chain)
   return useAbi<EventInfo.AllInfoStructOutput[], any>((provide, singer, account) => {
     const connect = Admin__factory.connect(CONTRACT_ADDRESS[chain?.id || 80001], provide);
     return connect.eventsForOwner(account.address);

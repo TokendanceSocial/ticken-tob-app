@@ -11,6 +11,7 @@ import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { useCallback, useMemo, useState } from 'react';
+import { useAccount } from 'wagmi';
 import ImageRender from './ImageRender';
 import { useCloseEvent } from '@/abihooks';
 import AirDrop from '@/components/AirDrop';
@@ -77,6 +78,7 @@ export default function EventsTable({
 }) {
   const { t } = useTranslation();
   const router = useRouter();
+  const { address } = useAccount();
   const [copySuccess, setCopySuccess] = useState(false);
   const { run: close, loading: closeLoading } = useCloseEvent();
 
@@ -109,11 +111,28 @@ export default function EventsTable({
 
         {
           title: (
-            <div>
+            <div
+              style={{
+                display: 'flex',
+                paddingInline: 10,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <div
+                style={{
+                  padding: '4px 8px',
+                }}
+              >{`https://www.ticken.app/detail?mode=mint&tid=...${address?.substring(
+                address.length - 6,
+              )}`}</div>
               <Button
+                type='link'
                 onClick={async () => {
                   try {
-                    // await copy(`${location.href}/${record.basic.id}`);
+                    await copy(
+                      `https://www.ticken.app/detail?mode=mint&tid=${record.contractAddress}&cid=${address}`,
+                    );
                     setCopySuccess(true);
                   } catch (error) {
                     setCopySuccess(false);
@@ -145,7 +164,15 @@ export default function EventsTable({
       ];
 
       return btns.map((btn) => (
-        <Tooltip key={btn.title.toString()} title={btn.title}>
+        <Tooltip
+          onOpenChange={() =>
+            setTimeout(() => {
+              setCopySuccess(false);
+            }, 300)
+          }
+          key={btn.title.toString()}
+          title={btn.title}
+        >
           <Button
             style={{ marginRight: 8 }}
             danger={btn.danger}
@@ -157,7 +184,7 @@ export default function EventsTable({
         </Tooltip>
       ));
     },
-    [t, copySuccess, router, close, reload, closeLoading],
+    [t, address, copySuccess, router, close, reload, closeLoading],
   );
 
   const columns = useMemo(() => {
