@@ -156,7 +156,7 @@ export default function EventsTable({
                 duration: 0,
               });
               await close(record.contractAddress);
-              message.destroy();
+              message.destroy('loading');
               reload();
             } catch (error) {}
           },

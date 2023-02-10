@@ -42,7 +42,13 @@ export default function EventDetail() {
 
   useEffect(() => {
     if (loading) {
-      message.loading(t('loading'));
+      message.loading({
+        content: t('loading'),
+        duration: 0,
+        key: 'loading',
+      });
+    } else {
+      message.destroy('loading');
     }
   }, [loading, t]);
 
@@ -118,9 +124,13 @@ export default function EventDetail() {
           <Button
             onClick={async () => {
               try {
-                message.loading(t('loading'), 0);
+                message.loading({
+                  content: t('loading'),
+                  duration: 0,
+                  key: 'loading',
+                });
                 await close(address);
-                message.destroy();
+                message.destroy('loading');
                 router.push(router.asPath.replace(/\/detail.*/, ''));
               } catch (error) {}
             }}

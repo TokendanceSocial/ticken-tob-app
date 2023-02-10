@@ -35,7 +35,11 @@ export default function CreateEvent() {
     };
 
     try {
-      message.loading(t('loading'), 0);
+      message.loading({
+        content: t('loading'),
+        duration: 0,
+        key: 'loading',
+      });
       const res = await nftUpload(mata);
       const time = formData.holdTime.unix();
       const data = await run({
