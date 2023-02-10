@@ -4,5 +4,5 @@ export const CONTRACT_ADDRESS: Record<number, string> = {
   // "Polygon Mumbai"
   80001: '0xBeCBf72d04E2Dd27049Cd1D2e07dC02641bB59EB',
   // "Polygon"
-  137: '0x4A325F249771b3eC0Af74de1C9a626b02EF0860A',
+  137: '0xBeCBf72d04E2Dd27049Cd1D2e07dC02641bB59EB',
 };
