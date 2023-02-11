@@ -2,7 +2,7 @@ import { Skeleton, ConfigProvider } from 'antd';
 import dark from 'antd/lib/theme/themes/dark';
 import dynamic from 'next/dynamic';
 import { useSession } from 'next-auth/react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
 import { useAccount, useNetwork } from 'wagmi';
 import Root from '../Root';
@@ -54,6 +54,22 @@ export default function App() {
   const session = useSession();
   const { isConnected } = useAccount();
   const { chain } = useNetwork();
+  const lastChainIdRef = useRef<number>();
+  useEffect(() => {
+    if (lastChainIdRef.current === undefined) {
+      if (chain?.id && !chain?.unsupported) {
+        lastChainIdRef.current = chain.id;
+        return;
+      }
+    } else {
+      if (chain?.id !== lastChainIdRef.current) {
+        window.location.reload();
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chain?.id]);
+
   if (session.status === 'authenticated' && isConnected && !chain?.unsupported) {
     return (
       <ConfigProvider
