@@ -134,6 +134,9 @@ export default function AirDrop({
         columns={columns}
         pagination={false}
         className='ticken-table '
+        scroll={{
+          y: 600,
+        }}
         dataSource={data?.map((item) => {
           return {
             address: item,
