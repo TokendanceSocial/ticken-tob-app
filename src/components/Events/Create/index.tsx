@@ -44,7 +44,7 @@ export default function CreateEvent() {
       const time = formData.holdTime.unix();
       const data = await run({
         name: formData.name,
-        symbol: formData.symbol,
+        symbol: formData.symbol || '',
         eventType: formData.eventType,
         holdTime: time,
         price: formData.price,
