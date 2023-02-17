@@ -1,7 +1,18 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useEffect, useState } from 'react';
+import { useAccount, useNetwork } from 'wagmi';
 import CustomAvatar from '../CustomAvatar';
+import { getBitName } from '@/utils/getBitName';
 
 export default function CustomConnectButton({ status }: { status: string }) {
+  const { address } = useAccount();
+  const { chain } = useNetwork();
+  const [displayName, setDisplayName] = useState<string>('');
+  useEffect(() => {
+    if (!chain || !address) return;
+    getBitName(address, chain.id, setDisplayName);
+  }, [address, chain]);
+
   return (
     <ConnectButton.Custom>
       {({
@@ -78,6 +89,7 @@ export default function CustomConnectButton({ status }: { status: string }) {
                         }}
                       >
                         {chain.iconUrl && (
+                          // eslint-disable-next-line @next/next/no-img-element
                           <img
                             alt={chain.name ?? 'Chain icon'}
                             src={chain.iconUrl}
@@ -112,7 +124,7 @@ export default function CustomConnectButton({ status }: { status: string }) {
                           size={24}
                         />
                       </div>
-                      <div>{account.displayName}</div>
+                      <div>{displayName || account.displayName}</div>
                       <div style={{ marginLeft: 8 }}>
                         <svg fill='none' height='7' width='14' xmlns='http://www.w3.org/2000/svg'>
                           <path
